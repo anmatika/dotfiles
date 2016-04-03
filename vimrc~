@@ -11,7 +11,6 @@ Plugin 'L9'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
 Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-Plugin 'ascenator/L9', {'name': 'newL9'}
 Plugin 'mattn/emmet-vim'
 Plugin 'vim-scripts/FuzzyFinder'
 Plugin 'ctrlpvim/ctrlp.vim'
@@ -21,7 +20,6 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'easymotion/vim-easymotion'
 Plugin 'OmniSharp/omnisharp-vim'
 Plugin 'tpope/vim-dispatch'
-Plugin 'OrangeT/vim-csharp'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'kchmck/vim-coffee-script'
 Plugin 'vim-airline/vim-airline'
@@ -99,7 +97,7 @@ set number                           " Always show line-numbers
 set numberwidth=5                    " Line-number margin width
 set mousehide                        " Do not show mouse while typing
 set antialias                        " Pretty fonts
-set t_Co=256                         " 256-color palletes
+"set t_Co=256                         " 256-color palletes
 set background=dark                  " Dark background variation of theme
 set guifont=Terminus:h11:cANSI
 set guioptions-=T                    " TODO

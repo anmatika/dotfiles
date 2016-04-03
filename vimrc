@@ -10,33 +10,28 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'L9'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
-Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plugin 'mattn/emmet-vim'
-Plugin 'vim-scripts/FuzzyFinder'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'groenewege/vim-less'
 Plugin 'tpope/vim-surround'
-Plugin 'altercation/vim-colors-solarized'
 Plugin 'easymotion/vim-easymotion'
-Plugin 'OmniSharp/omnisharp-vim'
 Plugin 'tpope/vim-dispatch'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'kchmck/vim-coffee-script'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
-Plugin 'notpratheek/vim-luna'
-
+Plugin 'nanotech/jellybeans.vim'
+"Plugin 'Decho'
 call vundle#end()            " required
+
 filetype plugin indent on    " required
 "
 " Brief help
 " :PluginList       - lists configured plugins
 " :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
 " :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+" :PluginClean      - confirms removal of unused plugins;0 append `!` to auto-approve removal
 "
-
-syntax on
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Editing setings
@@ -45,6 +40,8 @@ syntax on
 " Enable filetype plugin
 filetype plugin on
 filetype indent on
+syntax on
+set paste
 
 " Filetypes and encoding
 set fileformats=unix,dos,mac
@@ -55,7 +52,7 @@ set ffs=unix,dos
 " General behaviour
 " set autochdir      " CWD is always same as current file
 set ai             " Autoident
-"set si             " Smartident
+set si             " Smartident
 set nowrap         " Do not wrap lines
 set nocompatible   " ViM settings instead of Vi
 set smartcase      " Smart casing when searching
@@ -87,8 +84,7 @@ set shiftwidth=2
 " User interface setings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-syntax on
-colorscheme luna
+  colorscheme jellybeans
 
 set showmatch                        " Show matching braces when over one
 set ruler                            " Always show current position
@@ -97,7 +93,7 @@ set number                           " Always show line-numbers
 set numberwidth=5                    " Line-number margin width
 set mousehide                        " Do not show mouse while typing
 set antialias                        " Pretty fonts
-set t_Co=256                         " 256-color palletes
+"set t_Co=256                         " 256-color palletes
 set background=dark                  " Dark background variation of theme
 set guifont=Terminus:h11:cANSI
 set guioptions-=T                    " TODO
@@ -114,7 +110,7 @@ set list
  set list listchars=nbsp:¬,tab:--,trail:.,precedes:<,extends:>
 
 " Statusline
-" set statusline=%F%m%r%h%w[%L][%{&ff}]%y[%p%%][%04l,%04v]
+ set statusline=%F%m%r%h%w[%L][%{&ff}]%y[%p%%][%04l,%04v]
 "              | | | | |  |   |      |  |     |    |
 "              | | | | |  |   |      |  |     |    + current
 "              | | | | |  |   |      |  |     |       column
@@ -139,7 +135,10 @@ au InsertLeave * match ExtraWhitespace /\s\+$/
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugins
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:airline#extensions#tabline#enabled = 1
+" Airline
+set laststatus=2
+let g:airline#extensions#tabline#enabled=1
+let g:airline_theme='molokai'
 
 " Coffee
 
@@ -163,7 +162,7 @@ let g:syntastic_check_on_wq = 0
 :nmap n nzz  
 :nmap p pzz
 
-let mapleader = ","  " make leader , instead of \
+let mapleader = " "  " make leader , instead of \
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Key mappings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -177,12 +176,6 @@ inoremap <expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<PageUp>"
 " For highlighting trailing whitespaces
 nnoremap <Leader>wn :match ExtraWhitespace /^\s* \s*\<Bar>\s\+$/<CR>
 nnoremap <Leader>wf :match<CR>
-
-
-" FuzzyFinder
-nmap ,f :FufFileWithCurrentBufferDir<CR>
-nmap ,b :FufBuffer<CR>
-nmap ,t :FufTaggedFile<CR>
 
 " Disable arrows
 nmap <Right> <Nop>
@@ -205,8 +198,7 @@ nmap <A-k> :wincmd k<CR>
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 0
 noremap <F12> :NERDTree<CR>
-nnoremap <leader>n :NERDTree<CR>
-nnoremap <leader>nt :NERDTreeToggle<CR>
+nnoremap <leader>ne :NERDTree<CR>
 nmap <Leader>nf :NERDTreeFind<CR>
 nmap <Leader>nt :NERDTreeToggle <Esc>
 
@@ -221,11 +213,24 @@ nnoremap <Leader>l :w <BAR> !lessc % > %:t:r.css<CR><space>
 map <Leader>cj :CoffeeCompile vert <BAR> wincmd h<CR><ESC>
 
 " Tab
-nmap <C-Tab> :tabnext<CR>
+map <C-Tab> :tabnext<CR>
 nmap <C-S-Tab> :tabprevious<CR>
 map <C-S-Tab> :tabprevious<CR>
 map <C-Tab> :tabnext<CR>
 imap <C-S-Tab> <ESC>:tabprevious<CR>
 imap <C-Tab> <ESC>:tabnext<CR>
 noremap <F7> :set expandtab!<CR>
-nmap <Leader>h :tabnew %:h<CR>
+nmap <Leader>tn :tabnew %:h<CR>
+map <Leader>gt :tabnext<CR>
+
+"Buffer operations
+map <Leader>q :q<CR>
+map <Leader>qa :qa<CR>
+map <Leader>w :w<CR>
+
+"Text operations
+function s:make_uppercase()
+  nmap <Leader>wu g~iw
+endfunction
+call s:make_uppercase()
+
