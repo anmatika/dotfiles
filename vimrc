@@ -234,3 +234,5 @@ function s:make_uppercase()
 endfunction
 call s:make_uppercase()
 
+"yank to clipboard+
+vmap <C-c> "+y 
