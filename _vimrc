@@ -30,6 +30,7 @@ Plugin 'notpratheek/vim-luna'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
+syntax on
 "
 " Brief help
 " :PluginList       - lists configured plugins
@@ -37,9 +38,32 @@ filetype plugin indent on    " required
 " :PluginSearch foo - searches for foo; append `!` to refresh local cache
 " :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
 "
+" Functions
+function s:SetCursorLine()
+    set cursorline
+    "hi cursorline cterm=none ctermbg=darkblue ctermfg=white gui=underline
+endfunction
+fun! SetupCommandAlias(from, to)
+  exec 'cnoreabbrev <expr> '.a:from
+        \ .' ((getcmdtype() is# ":" && getcmdline() is# "'.a:from.'")'
+        \ .'? ("'.a:to.'") : ("'.a:from.'"))'
+endfun
+function StartMaximized()
+  if has("gui_running")
+    " GUI is running or is about to start.
+    " Maximize gvim window.
+    set lines=999 columns=999
+  endif
+endfunction
+function HideToolBarsAndScrollBars()
+  set guioptions-=m  "remove menu bar
+  set guioptions-=T  "remove toolbar
+  set guioptions-=r  "remove right-hand scroll bar
+  set guioptions-=L  "remove left-hand scroll bar
+endfunction
 
-syntax on
-
+call HideToolBarsAndScrollBars()
+call StartMaximized()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Editing setings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -53,7 +77,7 @@ set fileformats=unix,dos,mac
 set encoding=utf-8
 set wildignore=.svn,CVS,*.o,*.a,*.class,*.mo,*.la,*.so,*.obj,*.swp,*.jpg,*.png,*.xpm,*.gif
 set ffs=unix,dos
-
+autocmd VimEnter * call s:SetCursorLine()
 " General behaviour
 " set autochdir      " CWD is always same as current file
 set ai             " Autoident
@@ -101,7 +125,9 @@ set mousehide                        " Do not show mouse while typing
 set antialias                        " Pretty fonts
 set t_Co=256                         " 256-color palletes
 set background=dark                  " Dark background variation of theme
-set guifont=Terminus:h11:cANSI
+"set guifont=Terminus:h11:cANSI
+"set guifont=Monaco:h10
+set guifont=Source\ Code\ Pro:h10
 set guioptions-=T                    " TODO
 set guioptions+=c                    " TODO Console messages
 set linespace=0                      " Don't insert any extra pixel lines
@@ -146,7 +172,7 @@ let g:airline#extensions#tabline#enabled = 1
 " Coffee
 
 " compile on save
-autocmd BufWritePost *.coffee CoffeeCompile
+autocmd BufWritePost *.coffee :make! --compile
 
 " LESS
 autocmd BufWritePost *.less exe '!lessc ' . shellescape(expand('<afile>')) . ' ' . shellescape(expand('<afile>:r')) . '.css'
@@ -165,7 +191,7 @@ let g:syntastic_check_on_wq = 0
 :nmap n nzz  
 :nmap p pzz
 
-let mapleader = ","  " make leader , instead of \
+let mapleader = " "  " make leader , instead of \
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Key mappings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -221,7 +247,12 @@ nnoremap <Leader>l :w <BAR> !lessc % > %:t:r.css<CR><space>
 
 " Coffee
 map <Leader>cj :CoffeeCompile vert <BAR> wincmd h<CR><ESC>
-
+" ESC to clear higlight
+nnoremap <silent> <esc> :noh<cr><esc>
+" Saving
+nnoremap <leader>w :w<cr><esc>
+" Quitting
+nnoremap <leader>q :q<cr><esc>
 " Tab
 nmap <C-Tab> :tabnext<CR>
 nmap <C-S-Tab> :tabprevious<CR>
@@ -231,3 +262,11 @@ imap <C-S-Tab> <ESC>:tabprevious<CR>
 imap <C-Tab> <ESC>:tabnext<CR>
 noremap <F7> :set expandtab!<CR>
 nmap <Leader>h :tabnew %:h<CR>
+"Window resizing
+nmap<silent><A-Right> :vertical resize +5<CR>
+nmap<silent><A-Left> :vertical resize -5<CR>
+" vimrc quick launch
+call SetupCommandAlias("evimrc","e ~/_vimrc")
+"marks
+nnoremap <Leader>, :marks<CR>
+
