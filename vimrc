@@ -143,7 +143,7 @@ let g:airline_theme='molokai'
 " Coffee
 
 " compile on save
-autocmd BufWritePost *.coffee CoffeeCompile
+autocmd BufWritePost *.coffee :make! --compile
 
 " LESS
 autocmd BufWritePost *.less exe '!lessc ' . shellescape(expand('<afile>')) . ' ' . shellescape(expand('<afile>:r')) . '.css'
