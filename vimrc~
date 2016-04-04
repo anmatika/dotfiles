@@ -10,24 +10,22 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'L9'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
-Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plugin 'mattn/emmet-vim'
-Plugin 'vim-scripts/FuzzyFinder'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'groenewege/vim-less'
 Plugin 'tpope/vim-surround'
-Plugin 'altercation/vim-colors-solarized'
 Plugin 'easymotion/vim-easymotion'
-Plugin 'OmniSharp/omnisharp-vim'
 Plugin 'tpope/vim-dispatch'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'kchmck/vim-coffee-script'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
-Plugin 'notpratheek/vim-luna'
-
+Plugin 'nanotech/jellybeans.vim'
+"Plugin 'Decho'
 call vundle#end()            " required
+
 filetype plugin indent on    " required
+syntax on
 "
 " Brief help
 " :PluginList       - lists configured plugins
@@ -35,9 +33,32 @@ filetype plugin indent on    " required
 " :PluginSearch foo - searches for foo; append `!` to refresh local cache
 " :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
 "
+" Functions
+function s:SetCursorLine()
+    set cursorline
+    "hi cursorline cterm=none ctermbg=darkblue ctermfg=white gui=underline
+endfunction
+fun! SetupCommandAlias(from, to)
+  exec 'cnoreabbrev <expr> '.a:from
+        \ .' ((getcmdtype() is# ":" && getcmdline() is# "'.a:from.'")'
+        \ .'? ("'.a:to.'") : ("'.a:from.'"))'
+endfun
+function StartMaximized()
+  if has("gui_running")
+    " GUI is running or is about to start.
+    " Maximize gvim window.
+    set lines=999 columns=999
+  endif
+endfunction
+function HideToolBarsAndScrollBars()
+  set guioptions-=m  "remove menu bar
+  set guioptions-=T  "remove toolbar
+  set guioptions-=r  "remove right-hand scroll bar
+  set guioptions-=L  "remove left-hand scroll bar
+endfunction
 
-syntax on
-
+call HideToolBarsAndScrollBars()
+call StartMaximized()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Editing setings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -45,17 +66,19 @@ syntax on
 " Enable filetype plugin
 filetype plugin on
 filetype indent on
+syntax on
+set paste
 
 " Filetypes and encoding
 set fileformats=unix,dos,mac
 set encoding=utf-8
 set wildignore=.svn,CVS,*.o,*.a,*.class,*.mo,*.la,*.so,*.obj,*.swp,*.jpg,*.png,*.xpm,*.gif
 set ffs=unix,dos
-
+autocmd VimEnter * call s:SetCursorLine()
 " General behaviour
 " set autochdir      " CWD is always same as current file
 set ai             " Autoident
-"set si             " Smartident
+set si             " Smartident
 set nowrap         " Do not wrap lines
 set nocompatible   " ViM settings instead of Vi
 set smartcase      " Smart casing when searching
@@ -87,8 +110,7 @@ set shiftwidth=2
 " User interface setings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-syntax on
-colorscheme luna
+  colorscheme jellybeans
 
 set showmatch                        " Show matching braces when over one
 set ruler                            " Always show current position
@@ -97,6 +119,8 @@ set number                           " Always show line-numbers
 set numberwidth=5                    " Line-number margin width
 set mousehide                        " Do not show mouse while typing
 set antialias                        " Pretty fonts
+set t_Co=256                         " 256-color palletes
+set background=dark                  " Dark background variation of theme
 "set t_Co=256                         " 256-color palletes
 set background=dark                  " Dark background variation of theme
 set guifont=Terminus:h11:cANSI
@@ -114,7 +138,7 @@ set list
  set list listchars=nbsp:¬,tab:--,trail:.,precedes:<,extends:>
 
 " Statusline
-" set statusline=%F%m%r%h%w[%L][%{&ff}]%y[%p%%][%04l,%04v]
+ set statusline=%F%m%r%h%w[%L][%{&ff}]%y[%p%%][%04l,%04v]
 "              | | | | |  |   |      |  |     |    |
 "              | | | | |  |   |      |  |     |    + current
 "              | | | | |  |   |      |  |     |       column
@@ -144,7 +168,7 @@ let g:airline#extensions#tabline#enabled = 1
 " Coffee
 
 " compile on save
-autocmd BufWritePost *.coffee CoffeeCompile
+autocmd BufWritePost *.coffee :make! --compile
 
 " LESS
 autocmd BufWritePost *.less exe '!lessc ' . shellescape(expand('<afile>')) . ' ' . shellescape(expand('<afile>:r')) . '.css'
@@ -163,7 +187,7 @@ let g:syntastic_check_on_wq = 0
 :nmap n nzz  
 :nmap p pzz
 
-let mapleader = ","  " make leader , instead of \
+let mapleader = " "  " make leader , instead of \
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Key mappings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -177,12 +201,6 @@ inoremap <expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<PageUp>"
 " For highlighting trailing whitespaces
 nnoremap <Leader>wn :match ExtraWhitespace /^\s* \s*\<Bar>\s\+$/<CR>
 nnoremap <Leader>wf :match<CR>
-
-
-" FuzzyFinder
-nmap ,f :FufFileWithCurrentBufferDir<CR>
-nmap ,b :FufBuffer<CR>
-nmap ,t :FufTaggedFile<CR>
 
 " Disable arrows
 nmap <Right> <Nop>
@@ -205,8 +223,7 @@ nmap <A-k> :wincmd k<CR>
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 0
 noremap <F12> :NERDTree<CR>
-nnoremap <leader>n :NERDTree<CR>
-nnoremap <leader>nt :NERDTreeToggle<CR>
+nnoremap <leader>ne :NERDTree<CR>
 nmap <Leader>nf :NERDTreeFind<CR>
 nmap <Leader>nt :NERDTreeToggle <Esc>
 
@@ -219,7 +236,12 @@ nnoremap <Leader>l :w <BAR> !lessc % > %:t:r.css<CR><space>
 
 " Coffee
 map <Leader>cj :CoffeeCompile vert <BAR> wincmd h<CR><ESC>
-
+" ESC to clear higlight
+nnoremap <silent> <esc> :noh<cr><esc>
+" Saving
+nnoremap <leader>w :w<cr><esc>
+" Quitting
+nnoremap <leader>q :q<cr><esc>
 " Tab
 nmap <C-Tab> :tabnext<CR>
 nmap <C-S-Tab> :tabprevious<CR>
@@ -228,4 +250,19 @@ map <C-Tab> :tabnext<CR>
 imap <C-S-Tab> <ESC>:tabprevious<CR>
 imap <C-Tab> <ESC>:tabnext<CR>
 noremap <F7> :set expandtab!<CR>
-nmap <Leader>h :tabnew %:h<CR>
+nmap <Leader>tn :tabnew %:h<CR>
+map <Leader>gt :tabnext<CR>
+
+"Buffer operations
+map <Leader>q :q<CR>
+map <Leader>qa :qa<CR>
+map <Leader>w :w<CR>
+
+"Text operations
+function s:make_uppercase()
+  nmap <Leader>wu g~iw
+endfunction
+call s:make_uppercase()
+
+"yank to clipboard+
+vmap <C-c> "+y 

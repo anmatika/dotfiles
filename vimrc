@@ -25,14 +25,40 @@ Plugin 'nanotech/jellybeans.vim'
 call vundle#end()            " required
 
 filetype plugin indent on    " required
+syntax on
 "
 " Brief help
 " :PluginList       - lists configured plugins
 " :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
 " :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins;0 append `!` to auto-approve removal
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
 "
+" Functions
+function s:SetCursorLine()
+    set cursorline
+    "hi cursorline cterm=none ctermbg=darkblue ctermfg=white gui=underline
+endfunction
+fun! SetupCommandAlias(from, to)
+  exec 'cnoreabbrev <expr> '.a:from
+        \ .' ((getcmdtype() is# ":" && getcmdline() is# "'.a:from.'")'
+        \ .'? ("'.a:to.'") : ("'.a:from.'"))'
+endfun
+function StartMaximized()
+  if has("gui_running")
+    " GUI is running or is about to start.
+    " Maximize gvim window.
+    set lines=999 columns=999
+  endif
+endfunction
+function HideToolBarsAndScrollBars()
+  set guioptions-=m  "remove menu bar
+  set guioptions-=T  "remove toolbar
+  set guioptions-=r  "remove right-hand scroll bar
+  set guioptions-=L  "remove left-hand scroll bar
+endfunction
 
+call HideToolBarsAndScrollBars()
+call StartMaximized()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Editing setings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -48,7 +74,7 @@ set fileformats=unix,dos,mac
 set encoding=utf-8
 set wildignore=.svn,CVS,*.o,*.a,*.class,*.mo,*.la,*.so,*.obj,*.swp,*.jpg,*.png,*.xpm,*.gif
 set ffs=unix,dos
-
+autocmd VimEnter * call s:SetCursorLine()
 " General behaviour
 " set autochdir      " CWD is always same as current file
 set ai             " Autoident
@@ -93,6 +119,8 @@ set number                           " Always show line-numbers
 set numberwidth=5                    " Line-number margin width
 set mousehide                        " Do not show mouse while typing
 set antialias                        " Pretty fonts
+set t_Co=256                         " 256-color palletes
+set background=dark                  " Dark background variation of theme
 "set t_Co=256                         " 256-color palletes
 set background=dark                  " Dark background variation of theme
 set guifont=Terminus:h11:cANSI
@@ -110,7 +138,7 @@ set list
  set list listchars=nbsp:¬,tab:--,trail:.,precedes:<,extends:>
 
 " Statusline
- set statusline=%F%m%r%h%w[%L][%{&ff}]%y[%p%%][%04l,%04v]
+" set statusline=%F%m%r%h%w[%L][%{&ff}]%y[%p%%][%04l,%04v]
 "              | | | | |  |   |      |  |     |    |
 "              | | | | |  |   |      |  |     |    + current
 "              | | | | |  |   |      |  |     |       column
@@ -211,9 +239,14 @@ nnoremap <Leader>l :w <BAR> !lessc % > %:t:r.css<CR><space>
 
 " Coffee
 map <Leader>cj :CoffeeCompile vert <BAR> wincmd h<CR><ESC>
-
+" ESC to clear higlight
+nnoremap <silent> <esc> :noh<cr><esc>
+" Saving
+nnoremap <leader>w :w<cr><esc>
+" Quitting
+nnoremap <leader>q :q<cr><esc>
 " Tab
-map <C-Tab> :tabnext<CR>
+nmap <C-Tab> :tabnext<CR>
 nmap <C-S-Tab> :tabprevious<CR>
 map <C-S-Tab> :tabprevious<CR>
 map <C-Tab> :tabnext<CR>
