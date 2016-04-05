@@ -10,10 +10,14 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'L9'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
+Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+Plugin 'ascenator/L9', {'name': 'newL9'}
 Plugin 'mattn/emmet-vim'
+Plugin 'vim-scripts/FuzzyFinder'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'groenewege/vim-less'
 Plugin 'tpope/vim-surround'
+Plugin 'altercation/vim-colors-solarized'
 Plugin 'easymotion/vim-easymotion'
 Plugin 'OmniSharp/omnisharp-vim'
 Plugin 'tpope/vim-dispatch'
@@ -67,8 +71,6 @@ call StartMaximized()
 " Enable filetype plugin
 filetype plugin on
 filetype indent on
-syntax on
-set paste
 
 " Filetypes and encoding
 set fileformats=unix,dos,mac
@@ -165,15 +167,13 @@ au InsertLeave * match ExtraWhitespace /\s\+$/
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugins
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Airline
-set laststatus=2
-let g:airline#extensions#tabline#enabled=1
 let g:airline#extensions#tabline#enabled = 1
 
 " Coffee
 
 " compile on save
 autocmd BufWritePost *.coffee :make! --compile
+
 " LESS
 autocmd BufWritePost *.less exe '!lessc ' . shellescape(expand('<afile>')) . ' ' . shellescape(expand('<afile>:r')) . '.css'
 
@@ -206,6 +206,12 @@ inoremap <expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<PageUp>"
 nnoremap <Leader>wn :match ExtraWhitespace /^\s* \s*\<Bar>\s\+$/<CR>
 nnoremap <Leader>wf :match<CR>
 
+
+" FuzzyFinder
+nmap ,f :FufFileWithCurrentBufferDir<CR>
+nmap ,b :FufBuffer<CR>
+nmap ,t :FufTaggedFile<CR>
+
 " Disable arrows
 nmap <Right> <Nop>
 nmap <Left> <Nop>
@@ -227,7 +233,8 @@ nmap <A-k> :wincmd k<CR>
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 0
 noremap <F12> :NERDTree<CR>
-nnoremap <leader>ne :NERDTree<CR>
+nnoremap <leader>n :NERDTree<CR>
+nnoremap <leader>nt :NERDTreeToggle<CR>
 nmap <Leader>nf :NERDTreeFind<CR>
 nmap <Leader>nt :NERDTreeToggle <Esc>
 
@@ -239,7 +246,7 @@ nmap <C-p> :CtrlP<CR>
 nnoremap <Leader>l :w <BAR> !lessc % > %:t:r.css<CR><space>
 
 " Coffee
-autocmd FileType coffee nnoremap <Leader>cc :CoffeeCompile vert <BAR> wincmd h<CR><ESC>
+map <Leader>cj :CoffeeCompile vert <BAR> wincmd h<CR><ESC>
 " ESC to clear higlight
 nnoremap <silent> <esc> :noh<cr><esc>
 " Saving
@@ -254,23 +261,12 @@ map <C-Tab> :tabnext<CR>
 imap <C-S-Tab> <ESC>:tabprevious<CR>
 imap <C-Tab> <ESC>:tabnext<CR>
 noremap <F7> :set expandtab!<CR>
-nmap <Leader>tn :tabnew %:h<CR>
-map <Leader>gt :tabnext<CR>
+nmap <Leader>h :tabnew %:h<CR>
+"Window resizing
+nmap<silent><A-Right> :vertical resize +5<CR>
+nmap<silent><A-Left> :vertical resize -5<CR>
+" vimrc quick launch
+call SetupCommandAlias("evimrc","e ~/_vimrc")
+"marks
+nnoremap <Leader>, :marks<CR>
 
-"Buffer operations
-map <Leader>q :q<CR>
-map <Leader>qa :qa<CR>
-map <Leader>w :w<CR>
-
-"Text operations
-function s:make_uppercase()
-  nmap <Leader>wu g~iw
-endfunction
-call s:make_uppercase()
-"Vertical rezise
-nnoremap <silent><A-right> :vertical resize +5<CR><ESC>
-nnoremap <silent><A-left> :vertical resize -5<CR><ESC>
-"yank to clipboard+
-vmap <C-c> "+y 
-
-call SetupCommandAlias('evimrc', 'e ~/dotfiles/_vimrc')
