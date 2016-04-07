@@ -267,6 +267,5 @@ call s:make_uppercase()
 "Vertical rezise
 nnoremap <silent><C-right> :vertical resize +5<CR><ESC>
 nnoremap <silent><C-left> :vertical resize -5<CR><ESC>
-"yank to clipboard+
 
-"call SetupCommandAlias('evimrc', 'e ~/.dotfiles/vimrc')
+call SetupCommandAlias('evimrc', 'e ~/.dotfiles/vimrc')

@@ -19,14 +19,14 @@ Plugin 'tpope/vim-dispatch'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'kchmck/vim-coffee-script'
 Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'nanotech/jellybeans.vim'
 Plugin 'vim-scripts/taglist.vim'
+Plugin 'nanotech/jellybeans.vim'
 "Plugin 'Decho'
 call vundle#end()            " required
 
 filetype plugin indent on    " required
 syntax on
+set modifiable
 "
 " Brief help
 " :PluginList       - lists configured plugins
@@ -34,7 +34,7 @@ syntax on
 " :PluginSearch foo - searches for foo; append `!` to refresh local cache
 " :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
 "
- "Functions
+" Functions
 function s:SetCursorLine()
     set cursorline
     "hi cursorline cterm=none ctermbg=darkblue ctermfg=white gui=underline
@@ -46,8 +46,8 @@ fun! SetupCommandAlias(from, to)
 endfun
 function StartMaximized()
   if has("gui_running")
-     GUI is running or is about to start.
-     Maximize gvim window.
+    " GUI is running or is about to start.
+    " Maximize gvim window.
     set lines=999 columns=999
   endif
 endfunction
@@ -57,17 +57,7 @@ function HideToolBarsAndScrollBars()
   set guioptions-=r  "remove right-hand scroll bar
   set guioptions-=L  "remove left-hand scroll bar
 endfunction
-function FixAlt()
-  let c='a'
-  while c <= 'z'
-    exec "set <A-".c.">=\e".c
-    exec "imap \e".c." <A-".c.">"
-    let c = nr2char(1+char2nr(c))
-  endw
 
-  set timeout ttimeoutlen=50
-endfunction
-call FixAlt()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Editing setings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -87,7 +77,7 @@ autocmd VimEnter * call s:SetCursorLine()
 " General behaviour
 " set autochdir      " CWD is always same as current file
 set ai             " Autoident
-set si             " Smartident
+"set si             " Smartident
 set nowrap         " Do not wrap lines
 set nocompatible   " ViM settings instead of Vi
 set smartcase      " Smart casing when searching
@@ -175,7 +165,6 @@ au InsertLeave * match ExtraWhitespace /\s\+$/
 " Airline
 set laststatus=2
 let g:airline#extensions#tabline#enabled=1
-let g:airline_theme='molokai'
 
 " Coffee
 
@@ -210,11 +199,11 @@ inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
 inoremap <expr> <PageDown> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<PageDown>"
 inoremap <expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<PageUp>"
 
-"" For highlighting trailing whitespaces
+" For highlighting trailing whitespaces
 nnoremap <Leader>wn :match ExtraWhitespace /^\s* \s*\<Bar>\s\+$/<CR>
 nnoremap <Leader>wf :match<CR>
 
-"" Disable arrows
+" Disable arrows
 nnoremap <Right> <Nop>
 nnoremap <Left> <Nop>
 nnoremap <Up> <Nop>
@@ -224,14 +213,14 @@ inoremap <Right> <Nop>
 inoremap <Left> <Nop>
 inoremap <Up> <Nop>
 inoremap <Down> <Nop>
-
-"" Jump between windows
+nnoremap <space> <Nop>
+" Jump between windows
 noremap <A-h> :wincmd h<CR>
 nnoremap <A-l> :wincmd l<CR>
 nnoremap <A-j> :wincmd j<CR>
 nnoremap <A-k> :wincmd k<CR>
 
-"" NERDTree
+" NERDTree
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 0
 noremap <F12> :NERDTree<CR>
@@ -239,27 +228,27 @@ nnoremap <leader>ne :NERDTree<CR>
 nnoremap <Leader>nf :NERDTreeFind<CR>
 nnoremap <Leader>nt :NERDTreeToggle <Esc>
 
-""CtrlP (finder)
+"CtrlP (finder)
 let g:ctrlp_working_path_mode = 'ra'
 nnoremap <C-p> :CtrlP<CR>
 
-"" Less compiler
+" Less compiler
 nnoremap <Leader>l :w <BAR> !lessc % > %:t:r.css<CR><space>
 
-"" Coffee
-noremap <Leader>cj :CoffeeCompile vert <BAR> wincmd h<CR><ESC>
-"Clear highlights
-nnoremap <F3> :set hlsearch!<CR>
+" Coffee
+autocmd FileType coffee nnoremap <Leader>cc :CoffeeCompile vert <BAR> wincmd h<CR><ESC>
+" ESC to clear higlight
+nnoremap <silent> <esc> :noh<cr><esc>
 " Saving
-nnoremap <leader>w :w<cr><esc>
-" Quitting
-nnoremap <leader>q :q<cr><esc>
-"" Tab
-nnoremap <C-Tab> :tabnext<CR>
-nnoremap <C-S-Tab> :tabprevious<CR>
-noremap <C-S-Tab> :tabprevious<CR>
-noremap <C-Tab> :tabnext<CR>
-inoremap <C-S-Tab> <ESC>:tabprevious<CR>
+nnoremap <leader>w Cw<cr><esc>
+  " Quitting
+  nnoremap <leader>q :q<cr><esc>
+  " Tab
+  nnoremap <C-Tab> :tabnext<CR>
+  nnoremap <C-S-Tab> :tabprevious<CR>
+  noremap <C-S-Tab> :tabprevious<CR>
+  noremap <C-Tab> :tabnext<CR>
+  inoremap <C-S-Tab> <ESC>:tabprevious<CR>
 inoremap <C-Tab> <ESC>:tabnext<CR>
 noremap <F7> :set expandtab!<CR>
 nnoremap <Leader>tn :tabnew %:h<CR>
@@ -275,12 +264,9 @@ function s:make_uppercase()
   nnoremap <Leader>wu g~iw
 endfunction
 call s:make_uppercase()
-
-"yank to clipboard+
-vmap <C-c> "+y 
-
 "Vertical rezise
-nnoremap <silent><A-right> :vertical resize +5<CR><ESC>
-nnoremap <silent><A-left> :vertical resize -5<CR><ESC>
+nnoremap <silent><C-right> :vertical resize +5<CR><ESC>
+nnoremap <silent><C-left> :vertical resize -5<CR><ESC>
+"yank to clipboard+
 
-call SetupCommandAlias('evimrc', 'e ~/.dotfiles/vimrc')
+"call SetupCommandAlias('evimrc', 'e ~/.dotfiles/vimrc')

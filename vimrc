@@ -39,18 +39,21 @@ function s:SetCursorLine()
     set cursorline
     "hi cursorline cterm=none ctermbg=darkblue ctermfg=white gui=underline
 endfunction
+
 fun! SetupCommandAlias(from, to)
   exec 'cnoreabbrev <expr> '.a:from
         \ .' ((getcmdtype() is# ":" && getcmdline() is# "'.a:from.'")'
         \ .'? ("'.a:to.'") : ("'.a:from.'"))'
 endfun
+
 function StartMaximized()
   if has("gui_running")
-     GUI is running or is about to start.
-     Maximize gvim window.
+     "GUI is running or is about to start.
+     "Maximize gvim window.
     set lines=999 columns=999
   endif
 endfunction
+
 function HideToolBarsAndScrollBars()
   set guioptions-=m  "remove menu bar
   set guioptions-=T  "remove toolbar
@@ -58,6 +61,18 @@ function HideToolBarsAndScrollBars()
   set guioptions-=L  "remove left-hand scroll bar
 endfunction
 
+function FixAlt()
+  let c='a'
+  while c <= 'z'
+    exec "set <A-".c.">=\e".c
+    exec "imap \e".c." <A-".c.">"
+    let c = nr2char(1+char2nr(c))
+  endw
+
+  set timeout ttimeoutlen=50
+endfunction
+
+call FixAlt()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Editing setings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -268,3 +283,9 @@ call s:make_uppercase()
 
 "yank to clipboard+
 vmap <C-c> "+y 
+
+"Vertical rezise
+nnoremap <silent><A-right> :vertical resize +5<CR><ESC>
+nnoremap <silent><A-left> :vertical resize -5<CR><ESC>
+
+call SetupCommandAlias('evimrc', 'e ~/.dotfiles/vimrc')
