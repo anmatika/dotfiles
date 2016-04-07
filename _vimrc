@@ -25,8 +25,6 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'notpratheek/vim-luna'
 
 call vundle#end()            " required
-filetype plugin indent on    " required
-syntax on
 "
 " Brief help
 " :PluginList       - lists configured plugins
@@ -34,32 +32,6 @@ syntax on
 " :PluginSearch foo - searches for foo; append `!` to refresh local cache
 " :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
 "
-" Functions
-function s:SetCursorLine()
-    set cursorline
-    "hi cursorline cterm=none ctermbg=darkblue ctermfg=white gui=underline
-endfunction
-fun! SetupCommandAlias(from, to)
-  exec 'cnoreabbrev <expr> '.a:from
-        \ .' ((getcmdtype() is# ":" && getcmdline() is# "'.a:from.'")'
-        \ .'? ("'.a:to.'") : ("'.a:from.'"))'
-endfun
-function StartMaximized()
-  if has("gui_running")
-    " GUI is running or is about to start.
-    " Maximize gvim window.
-    set lines=999 columns=999
-  endif
-endfunction
-function HideToolBarsAndScrollBars()
-  set guioptions-=m  "remove menu bar
-  set guioptions-=T  "remove toolbar
-  set guioptions-=r  "remove right-hand scroll bar
-  set guioptions-=L  "remove left-hand scroll bar
-endfunction
-
-call HideToolBarsAndScrollBars()
-call StartMaximized()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Editing setings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -67,6 +39,10 @@ call StartMaximized()
 " Enable filetype plugin
 filetype plugin on
 filetype indent on
+set encoding=utf-8
+setglobal fileencoding=utf-8
+  "setglobal bomb
+set fileencodings=ucs-bom,utf-8,latin1
 syntax on
 set paste
 
@@ -75,7 +51,6 @@ set fileformats=unix,dos,mac
 set encoding=utf-8
 set wildignore=.svn,CVS,*.o,*.a,*.class,*.mo,*.la,*.so,*.obj,*.swp,*.jpg,*.png,*.xpm,*.gif
 set ffs=unix,dos
-autocmd VimEnter * call s:SetCursorLine()
 " General behaviour
 " set autochdir      " CWD is always same as current file
 set ai             " Autoident
@@ -137,8 +112,7 @@ set wildmode=longest,list,full       " Wild menu options
 set list
 " Show < or > when characters are not displayed on the left or right.
 " Also show tabs and trailing spaces.
- set list listchars=nbsp:¬,tab:--,trail:.,precedes:<,extends:>
-
+set list listchars=nbsp:¬,tab:»»,trail:.,precedes:<,extends:>
 " Statusline
 " set statusline=%F%m%r%h%w[%L][%{&ff}]%y[%p%%][%04l,%04v]
 "              | | | | |  |   |      |  |     |    |
@@ -162,13 +136,40 @@ highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
 au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 au InsertLeave * match ExtraWhitespace /\s\+$/
 
+" Functions
+function s:SetCursorLine()
+    set cursorline
+    "hi cursorline cterm=none ctermbg=darkblue ctermfg=white gui=underline
+endfunction
+fun! SetupCommandAlias(from, to)
+  exec 'cnoreabbrev <expr> '.a:from
+        \ .' ((getcmdtype() is# ":" && getcmdline() is# "'.a:from.'")'
+        \ .'? ("'.a:to.'") : ("'.a:from.'"))'
+endfun
+function StartMaximized()
+  if has("gui_running")
+    " GUI is running or is about to start.
+    " Maximize gvim window.
+    set lines=999 columns=999
+  endif
+endfunction
+function HideToolBarsAndScrollBars()
+  set guioptions-=m  "remove menu bar
+  set guioptions-=T  "remove toolbar
+  set guioptions-=r  "remove right-hand scroll bar
+  set guioptions-=L  "remove left-hand scroll bar
+endfunction
+
+call HideToolBarsAndScrollBars()
+call StartMaximized()
+
+autocmd VimEnter * call s:SetCursorLine()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugins
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Airline
 set laststatus=2
 let g:airline#extensions#tabline#enabled=1
-let g:airline#extensions#tabline#enabled = 1
 
 " Coffee
 
@@ -234,7 +235,7 @@ nmap <Leader>nt :NERDTreeToggle <Esc>
 "CtrlP (finder)
 let g:ctrlp_working_path_mode = 'ra'
 nmap <C-p> :CtrlP<CR>
-
+nnoremap <Leader>. :CtrlPTag<CR>
 " Less compiler
 nnoremap <Leader>l :w <BAR> !lessc % > %:t:r.css<CR><space>
 
