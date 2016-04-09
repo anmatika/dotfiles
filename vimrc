@@ -22,6 +22,7 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'nanotech/jellybeans.vim'
 Plugin 'vim-scripts/taglist.vim'
+Plugin 'maksimr/vim-jsbeautify'
 "Plugin 'Decho'
 call vundle#end()            " required
 
@@ -38,20 +39,6 @@ syntax on
 function s:SetCursorLine()
     set cursorline
     "hi cursorline cterm=none ctermbg=darkblue ctermfg=white gui=underline
-endfunction
-
-fun! SetupCommandAlias(from, to)
-  exec 'cnoreabbrev <expr> '.a:from
-        \ .' ((getcmdtype() is# ":" && getcmdline() is# "'.a:from.'")'
-        \ .'? ("'.a:to.'") : ("'.a:from.'"))'
-endfun
-
-function StartMaximized()
-  if has("gui_running")
-     "GUI is running or is about to start.
-     "Maximize gvim window.
-    set lines=999 columns=999
-  endif
 endfunction
 
 function HideToolBarsAndScrollBars()
@@ -73,10 +60,24 @@ function FixAlt()
 endfunction
 
 call FixAlt()
+
+fun! SetupCommandAlias(from, to)
+  exec 'cnoreabbrev <expr> '.a:from
+        \ .' ((getcmdtype() is# ":" && getcmdline() is# "'.a:from.'")'
+        \ .'? ("'.a:to.'") : ("'.a:from.'"))'
+endfun
+
+function StartMaximized()
+  if has("gui_running")
+     "GUI is running or is about to start.
+     "Maximize gvim window.
+    set lines=999 columns=999
+  endif
+endfunction
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Editing setings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 " Enable filetype plugin
 filetype plugin on
 filetype indent on
@@ -269,6 +270,18 @@ inoremap <C-Tab> <ESC>:tabnext<CR>
 noremap <F7> :set expandtab!<CR>
 nnoremap <Leader>tn :tabnew %:h<CR>
 noremap <Leader>gt :tabnext<CR>
+
+"js-beautify
+autocmd FileType javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
+autocmd FileType json noremap <buffer> <c-f> :call JsonBeautify()<cr>
+autocmd FileType jsx noremap <buffer> <c-f> :call JsxBeautify()<cr>
+autocmd FileType html noremap <buffer> <c-f> :call HtmlBeautify()<cr>
+autocmd FileType css noremap <buffer> <c-f> :call CSSBeautify()<cr>
+autocmd FileType javascript vnoremap <buffer>  <c-f> :call RangeJsBeautify()<cr>
+autocmd FileType json vnoremap <buffer> <c-f> :call RangeJsonBeautify()<cr>
+autocmd FileType jsx vnoremap <buffer> <c-f> :call RangeJsxBeautify()<cr>
+autocmd FileType html vnoremap <buffer> <c-f> :call RangeHtmlBeautify()<cr>
+autocmd FileType css vnoremap <buffer> <c-f> :call RangeCSSBeautify()<cr>
 
 "Buffer operations
 noremap <Leader>q :q<CR>

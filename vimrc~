@@ -39,24 +39,14 @@ function s:SetCursorLine()
     set cursorline
     "hi cursorline cterm=none ctermbg=darkblue ctermfg=white gui=underline
 endfunction
-fun! SetupCommandAlias(from, to)
-  exec 'cnoreabbrev <expr> '.a:from
-        \ .' ((getcmdtype() is# ":" && getcmdline() is# "'.a:from.'")'
-        \ .'? ("'.a:to.'") : ("'.a:from.'"))'
-endfun
-function StartMaximized()
-  if has("gui_running")
-     GUI is running or is about to start.
-     Maximize gvim window.
-    set lines=999 columns=999
-  endif
-endfunction
+
 function HideToolBarsAndScrollBars()
   set guioptions-=m  "remove menu bar
   set guioptions-=T  "remove toolbar
   set guioptions-=r  "remove right-hand scroll bar
   set guioptions-=L  "remove left-hand scroll bar
 endfunction
+
 function FixAlt()
   let c='a'
   while c <= 'z'
@@ -67,11 +57,26 @@ function FixAlt()
 
   set timeout ttimeoutlen=50
 endfunction
+
 call FixAlt()
+
+fun! SetupCommandAlias(from, to)
+  exec 'cnoreabbrev <expr> '.a:from
+        \ .' ((getcmdtype() is# ":" && getcmdline() is# "'.a:from.'")'
+        \ .'? ("'.a:to.'") : ("'.a:from.'"))'
+endfun
+
+function StartMaximized()
+  if has("gui_running")
+     "GUI is running or is about to start.
+     "Maximize gvim window.
+    set lines=999 columns=999
+  endif
+endfunction
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Editing setings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 " Enable filetype plugin
 filetype plugin on
 filetype indent on
