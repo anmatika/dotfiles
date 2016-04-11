@@ -1,5 +1,0 @@
-"Vertical rezise
-nnoremap <silent><C-right> :vertical resize +5<CR><ESC>
-nnoremap <silent><C-left> :vertical resize -5<CR><ESC>
-
-call SetupCommandAlias('evimrc', 'e ~/.dotfiles/vimrc')
