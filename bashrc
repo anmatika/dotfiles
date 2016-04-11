@@ -20,7 +20,7 @@ PS1="$TITLEBAR\n\[${UC}\]\u \[${COLOR_LIGHT_BLUE}\]\${PWD} \[${COLOR_BLACK}\]\n\
 
 PATH=$PATH:/home/antti/Scripts:/home/antti/Symlinks:/opt/sublime_text_3:/home/antti/.npm-global/bin
 
-source /usr/share/autojump/autojump.bash
+#source /usr/share/autojump/autojump.bash
 fortune -s | cowsay
 xset -b
 set bell-style none
@@ -36,5 +36,4 @@ fi
 export NVM_DIR="/home/antti/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 source ~/.dotfiles/.functions
-
 
