@@ -63,13 +63,19 @@ function FixAlt()
   set timeout ttimeoutlen=50
 endfunction
 
-call FixAlt()
 
 fun! SetupCommandAlias(from, to)
   exec 'cnoreabbrev <expr> '.a:from
         \ .' ((getcmdtype() is# ":" && getcmdline() is# "'.a:from.'")'
         \ .'? ("'.a:to.'") : ("'.a:from.'"))'
 endfun
+
+function AutoReloadVimrc()
+	augroup reload_vimrc " {
+			autocmd!
+			autocmd BufWritePost $MYVIMRC source $MYVIMRC
+	augroup END " }
+endfunction
 
 function StartMaximized()
   if has("gui_running")
@@ -79,6 +85,8 @@ function StartMaximized()
   endif
 endfunction
 
+call FixAlt()
+call AutoReloadVimrc()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Editing setings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
