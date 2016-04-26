@@ -40,19 +40,19 @@ syntax on
 " :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
 "
  "Functions
-function s:SetCursorLine()
+function! s:SetCursorLine()
     set cursorline
     "hi cursorline cterm=none ctermbg=darkblue ctermfg=white gui=underline
 endfunction
 
-function HideToolBarsAndScrollBars()
+function! HideToolBarsAndScrollBars()
   set guioptions-=m  "remove menu bar
   set guioptions-=T  "remove toolbar
   set guioptions-=r  "remove right-hand scroll bar
   set guioptions-=L  "remove left-hand scroll bar
 endfunction
 
-function FixAlt()
+function! FixAlt()
   let c='a'
   while c <= 'z'
     exec "set <A-".c.">=\e".c
@@ -70,14 +70,14 @@ fun! SetupCommandAlias(from, to)
         \ .'? ("'.a:to.'") : ("'.a:from.'"))'
 endfun
 
-function AutoReloadVimrc()
+function! AutoReloadVimrc()
 	augroup reload_vimrc " {
 			autocmd!
 			autocmd BufWritePost $MYVIMRC source $MYVIMRC
 	augroup END " }
 endfunction
 
-function StartMaximized()
+function! StartMaximized()
   if has("gui_running")
      "GUI is running or is about to start.
      "Maximize gvim window.
@@ -314,7 +314,7 @@ noremap <Leader>qa :qa<CR>
 noremap <Leader>w :w<CR>
 
 "Text operations
-function s:make_uppercase()
+function! s:make_uppercase()
   nnoremap <Leader>wu g~iw
 endfunction
 call s:make_uppercase()
@@ -325,6 +325,9 @@ vmap <C-c> "+y
 "Vertical rezise
 nnoremap <silent><A-right> :vertical resize +5<CR><ESC>
 nnoremap <silent><A-left> :vertical resize -5<CR><ESC>
+
+"Clear search hilight
+nnoremap <silent> <Leader>/ :nohlsearch<CR>
 
 "find and replace under cursor
 nnoremap <leader>s :%s/<c-r><c-w>/
