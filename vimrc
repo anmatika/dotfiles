@@ -10,7 +10,7 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'L9'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
-Plugin 'mattn/emmet-vim'
+"Plugin 'mattn/emmet-vim'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'groenewege/vim-less'
 Plugin 'tpope/vim-surround'
@@ -23,10 +23,14 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'nanotech/jellybeans.vim'
 Plugin 'vim-scripts/taglist.vim'
 Plugin 'maksimr/vim-jsbeautify'
+Plugin 'rking/ag.vim'
+Plugin 'Chun-Yang/vim-action-ag'
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
+Plugin 'jlanzarotta/bufexplorer'
 "Plugin 'Decho'
-call vundle#end()            " required
-
-filetype plugin indent on    " required
+call vundle#end()
+filetype plugin indent on
 syntax on
 "
 " Brief help
@@ -186,7 +190,7 @@ let g:airline_theme='molokai'
 " Coffee
 
 " compile on save
-autocmd BufWritePost *.coffee :make! --compile
+autocmd BufWritePost *.coffee silent :make! --compile
 
 " LESS
 autocmd BufWritePost *.less exe '!lessc ' . shellescape(expand('<afile>')) . ' ' . shellescape(expand('<afile>:r')) . '.css'
@@ -204,6 +208,17 @@ let g:syntastic_check_on_wq = 0
 " Auto center search
 :nnoremap n nzz  
 :nnoremap p pzz
+
+"UltiSnip
+"Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+"let g:UltiSnipsSnippetsDir="/home/antti/.vim/bundle/vim-snippets/UltiSnips/"
+let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/bundle/vim-snippets/UltiSnips']
+
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
 
 let mapleader = " "  " make leader , instead of \
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -242,20 +257,22 @@ let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 0
 noremap <F12> :NERDTree<CR>
 nnoremap <leader>ne :NERDTree<CR>
-nnoremap <Leader>nf :NERDTreeFind<CR>
+nnoremap <Leader>n :NERDTreeFind<CR>
 nnoremap <Leader>nt :NERDTreeToggle <Esc>
 
 ""CtrlP (finder)
 let g:ctrlp_working_path_mode = 'ra'
 nnoremap <C-p> :CtrlP<CR>
+nnoremap <leader>. :CtrlPTag<CR>
 
 "" Less compiler
 nnoremap <Leader>l :w <BAR> !lessc % > %:t:r.css<CR><space>
 
 "" Coffee
-noremap <Leader>cj :CoffeeCompile vert <BAR> wincmd h<CR><ESC>
+noremap <silent><Leader>c :CoffeeWatch vert<CR>
+
 "Clear highlights
-nnoremap <F3> :set hlsearch!<CR>
+nnoremap <f3> :set hlsearch!<CR>
 " Saving
 nnoremap <leader>w :w<cr><esc>
 " Quitting
@@ -301,4 +318,6 @@ vmap <C-c> "+y
 nnoremap <silent><A-right> :vertical resize +5<CR><ESC>
 nnoremap <silent><A-left> :vertical resize -5<CR><ESC>
 
-call SetupCommandAlias('evimrc', 'e ~/.dotfiles/vimrc')
+"find and replace under cursor
+nnoremap <leader>s :%s/<c-r><c-w>/
+

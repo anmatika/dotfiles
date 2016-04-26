@@ -8,6 +8,7 @@
 alias ls='ls --color=auto --format=long'
 alias l='ls -lh'
 alias vi='vim'
+alias emvimrc='vim ~/.vimrc'
 source ~/.aliases
 
 export VISUAL=vim; 
