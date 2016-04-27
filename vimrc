@@ -21,6 +21,7 @@ Plugin 'kchmck/vim-coffee-script'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'nanotech/jellybeans.vim'
+Plugin 'ryanoasis/vim-devicons'
 "Plugin 'Decho'
 call vundle#end()            " required
 
