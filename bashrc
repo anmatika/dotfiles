@@ -8,6 +8,7 @@
 alias ls='ls --color=auto --format=long'
 alias l='ls -lh'
 alias vi='vim'
+alias emvimrc='vim ~/.vimrc'
 source ~/.aliases
 
 export VISUAL=vim; 
@@ -22,7 +23,6 @@ PATH=$PATH:/home/antti/Scripts:/home/antti/Symlinks:/opt/sublime_text_3:/home/an
 
 #source /usr/share/autojump/autojump.bash
 fortune -s | cowsay
-cowsay `bible --lang en 'Genesis 1:24' --onlyVerses`
 xset -b
 set bell-style none
 alias pbcopy='xsel --clipboard --input'
@@ -37,5 +37,4 @@ fi
 export NVM_DIR="/home/antti/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 source ~/.dotfiles/.functions
-
 

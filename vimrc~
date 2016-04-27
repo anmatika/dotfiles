@@ -21,6 +21,7 @@ Plugin 'kchmck/vim-coffee-script'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'nanotech/jellybeans.vim'
+Plugin 'vim-scripts/taglist.vim'
 "Plugin 'Decho'
 call vundle#end()            " required
 
@@ -33,23 +34,12 @@ syntax on
 " :PluginSearch foo - searches for foo; append `!` to refresh local cache
 " :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
 "
-" Functions
+ "Functions
 function s:SetCursorLine()
     set cursorline
     "hi cursorline cterm=none ctermbg=darkblue ctermfg=white gui=underline
 endfunction
-fun! SetupCommandAlias(from, to)
-  exec 'cnoreabbrev <expr> '.a:from
-        \ .' ((getcmdtype() is# ":" && getcmdline() is# "'.a:from.'")'
-        \ .'? ("'.a:to.'") : ("'.a:from.'"))'
-endfun
-function StartMaximized()
-  if has("gui_running")
-    " GUI is running or is about to start.
-    " Maximize gvim window.
-    set lines=999 columns=999
-  endif
-endfunction
+
 function HideToolBarsAndScrollBars()
   set guioptions-=m  "remove menu bar
   set guioptions-=T  "remove toolbar
@@ -57,12 +47,36 @@ function HideToolBarsAndScrollBars()
   set guioptions-=L  "remove left-hand scroll bar
 endfunction
 
-call HideToolBarsAndScrollBars()
-call StartMaximized()
+function FixAlt()
+  let c='a'
+  while c <= 'z'
+    exec "set <A-".c.">=\e".c
+    exec "imap \e".c." <A-".c.">"
+    let c = nr2char(1+char2nr(c))
+  endw
+
+  set timeout ttimeoutlen=50
+endfunction
+
+call FixAlt()
+
+fun! SetupCommandAlias(from, to)
+  exec 'cnoreabbrev <expr> '.a:from
+        \ .' ((getcmdtype() is# ":" && getcmdline() is# "'.a:from.'")'
+        \ .'? ("'.a:to.'") : ("'.a:from.'"))'
+endfun
+
+function StartMaximized()
+  if has("gui_running")
+     "GUI is running or is about to start.
+     "Maximize gvim window.
+    set lines=999 columns=999
+  endif
+endfunction
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Editing setings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 " Enable filetype plugin
 filetype plugin on
 filetype indent on
@@ -138,7 +152,7 @@ set list
  set list listchars=nbsp:¬,tab:--,trail:.,precedes:<,extends:>
 
 " Statusline
- set statusline=%F%m%r%h%w[%L][%{&ff}]%y[%p%%][%04l,%04v]
+" set statusline=%F%m%r%h%w[%L][%{&ff}]%y[%p%%][%04l,%04v]
 "              | | | | |  |   |      |  |     |    |
 "              | | | | |  |   |      |  |     |    + current
 "              | | | | |  |   |      |  |     |       column
@@ -163,7 +177,10 @@ au InsertLeave * match ExtraWhitespace /\s\+$/
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugins
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:airline#extensions#tabline#enabled = 1
+" Airline
+set laststatus=2
+let g:airline#extensions#tabline#enabled=1
+let g:airline_theme='molokai'
 
 " Coffee
 
@@ -184,8 +201,8 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
 " Auto center search
-:nmap n nzz  
-:nmap p pzz
+:nnoremap n nzz  
+:nnoremap p pzz
 
 let mapleader = " "  " make leader , instead of \
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -198,71 +215,77 @@ inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
 inoremap <expr> <PageDown> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<PageDown>"
 inoremap <expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<PageUp>"
 
-" For highlighting trailing whitespaces
+"" For highlighting trailing whitespaces
 nnoremap <Leader>wn :match ExtraWhitespace /^\s* \s*\<Bar>\s\+$/<CR>
 nnoremap <Leader>wf :match<CR>
 
-" Disable arrows
-nmap <Right> <Nop>
-nmap <Left> <Nop>
-nmap <Up> <Nop>
-nmap <Down> <Nop>
+"" Disable arrows
+nnoremap <Right> <Nop>
+nnoremap <Left> <Nop>
+nnoremap <Up> <Nop>
+nnoremap <Down> <Nop>
 
-imap <Right> <Nop>
-imap <Left> <Nop>
-imap <Up> <Nop>
-imap <Down> <Nop>
+inoremap <Right> <Nop>
+inoremap <Left> <Nop>
+inoremap <Up> <Nop>
+inoremap <Down> <Nop>
 
-" Jump between windows
-map <A-h> :wincmd h<CR>
-nmap <A-l> :wincmd l<CR>
-nmap <A-j> :wincmd j<CR>
-nmap <A-k> :wincmd k<CR>
+"" Jump between windows
+noremap <A-h> :wincmd h<CR>
+nnoremap <A-l> :wincmd l<CR>
+nnoremap <A-j> :wincmd j<CR>
+nnoremap <A-k> :wincmd k<CR>
 
-" NERDTree
+"" NERDTree
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 0
 noremap <F12> :NERDTree<CR>
 nnoremap <leader>ne :NERDTree<CR>
-nmap <Leader>nf :NERDTreeFind<CR>
-nmap <Leader>nt :NERDTreeToggle <Esc>
+nnoremap <Leader>nf :NERDTreeFind<CR>
+nnoremap <Leader>nt :NERDTreeToggle <Esc>
 
-"CtrlP (finder)
+""CtrlP (finder)
 let g:ctrlp_working_path_mode = 'ra'
-nmap <C-p> :CtrlP<CR>
+nnoremap <C-p> :CtrlP<CR>
 
-" Less compiler
+"" Less compiler
 nnoremap <Leader>l :w <BAR> !lessc % > %:t:r.css<CR><space>
 
-" Coffee
-map <Leader>cj :CoffeeCompile vert <BAR> wincmd h<CR><ESC>
-" ESC to clear higlight
-nnoremap <silent> <esc> :noh<cr><esc>
+"" Coffee
+noremap <Leader>cj :CoffeeCompile vert <BAR> wincmd h<CR><ESC>
+"Clear highlights
+nnoremap <F3> :set hlsearch!<CR>
 " Saving
 nnoremap <leader>w :w<cr><esc>
 " Quitting
 nnoremap <leader>q :q<cr><esc>
-" Tab
-nmap <C-Tab> :tabnext<CR>
-nmap <C-S-Tab> :tabprevious<CR>
-map <C-S-Tab> :tabprevious<CR>
-map <C-Tab> :tabnext<CR>
-imap <C-S-Tab> <ESC>:tabprevious<CR>
-imap <C-Tab> <ESC>:tabnext<CR>
+"" Tab
+nnoremap <C-Tab> :tabnext<CR>
+nnoremap <C-S-Tab> :tabprevious<CR>
+noremap <C-S-Tab> :tabprevious<CR>
+noremap <C-Tab> :tabnext<CR>
+inoremap <C-S-Tab> <ESC>:tabprevious<CR>
+inoremap <C-Tab> <ESC>:tabnext<CR>
 noremap <F7> :set expandtab!<CR>
-nmap <Leader>tn :tabnew %:h<CR>
-map <Leader>gt :tabnext<CR>
+nnoremap <Leader>tn :tabnew %:h<CR>
+noremap <Leader>gt :tabnext<CR>
 
 "Buffer operations
-map <Leader>q :q<CR>
-map <Leader>qa :qa<CR>
-map <Leader>w :w<CR>
+noremap <Leader>q :q<CR>
+noremap <Leader>qa :qa<CR>
+noremap <Leader>w :w<CR>
 
 "Text operations
 function s:make_uppercase()
-  nmap <Leader>wu g~iw
+  nnoremap <Leader>wu g~iw
 endfunction
 call s:make_uppercase()
 
 "yank to clipboard+
 vmap <C-c> "+y 
+
+"Vertical rezise
+nnoremap <silent><A-right> :vertical resize +5<CR><ESC>
+nnoremap <silent><A-left> :vertical resize -5<CR><ESC>
+
+call SetupCommandAlias('evimrc', 'e ~/.dotfiles/vimrc')

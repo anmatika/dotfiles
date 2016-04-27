@@ -3,34 +3,30 @@ filetype off                  " required
 " ''''''''''''''''''''''''''''''''''''''''''''
 " Vundle
 " ''''''''''''''''''''''''''''''''''''''''''''
-set rtp+=$HOME/vimfiles/bundle/Vundle.vim/
-call vundle#begin('$USERPROFILE/vimfiles/bundle/')
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'tpope/vim-fugitive'
 Plugin 'L9'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
-Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-Plugin 'ascenator/L9', {'name': 'newL9'}
 Plugin 'mattn/emmet-vim'
-Plugin 'vim-scripts/FuzzyFinder'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'groenewege/vim-less'
 Plugin 'tpope/vim-surround'
-Plugin 'altercation/vim-colors-solarized'
 Plugin 'easymotion/vim-easymotion'
-Plugin 'OmniSharp/omnisharp-vim'
 Plugin 'tpope/vim-dispatch'
-Plugin 'OrangeT/vim-csharp'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'kchmck/vim-coffee-script'
 Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'notpratheek/vim-luna'
-
+Plugin 'vim-scripts/taglist.vim'
+Plugin 'nanotech/jellybeans.vim'
+"Plugin 'Decho'
 call vundle#end()            " required
+
 filetype plugin indent on    " required
 syntax on
+set modifiable
 "
 " Brief help
 " :PluginList       - lists configured plugins
@@ -62,8 +58,6 @@ function HideToolBarsAndScrollBars()
   set guioptions-=L  "remove left-hand scroll bar
 endfunction
 
-call HideToolBarsAndScrollBars()
-call StartMaximized()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Editing setings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -71,6 +65,8 @@ call StartMaximized()
 " Enable filetype plugin
 filetype plugin on
 filetype indent on
+syntax on
+set paste
 
 " Filetypes and encoding
 set fileformats=unix,dos,mac
@@ -113,8 +109,7 @@ set shiftwidth=2
 " User interface setings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-syntax on
-colorscheme luna
+  colorscheme jellybeans
 
 set showmatch                        " Show matching braces when over one
 set ruler                            " Always show current position
@@ -125,9 +120,9 @@ set mousehide                        " Do not show mouse while typing
 set antialias                        " Pretty fonts
 set t_Co=256                         " 256-color palletes
 set background=dark                  " Dark background variation of theme
-"set guifont=Terminus:h11:cANSI
-"set guifont=Monaco:h10
-set guifont=Source\ Code\ Pro:h10
+"set t_Co=256                         " 256-color palletes
+set background=dark                  " Dark background variation of theme
+set guifont=Terminus:h11:cANSI
 set guioptions-=T                    " TODO
 set guioptions+=c                    " TODO Console messages
 set linespace=0                      " Don't insert any extra pixel lines
@@ -167,7 +162,9 @@ au InsertLeave * match ExtraWhitespace /\s\+$/
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugins
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let g:airline#extensions#tabline#enabled = 1
+" Airline
+set laststatus=2
+let g:airline#extensions#tabline#enabled=1
 
 " Coffee
 
@@ -188,8 +185,8 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
 " Auto center search
-:nmap n nzz  
-:nmap p pzz
+:nnoremap n nzz  
+:nnoremap p pzz
 
 let mapleader = " "  " make leader , instead of \
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -206,67 +203,70 @@ inoremap <expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<PageUp>"
 nnoremap <Leader>wn :match ExtraWhitespace /^\s* \s*\<Bar>\s\+$/<CR>
 nnoremap <Leader>wf :match<CR>
 
-
-" FuzzyFinder
-nmap ,f :FufFileWithCurrentBufferDir<CR>
-nmap ,b :FufBuffer<CR>
-nmap ,t :FufTaggedFile<CR>
-
 " Disable arrows
-nmap <Right> <Nop>
-nmap <Left> <Nop>
-nmap <Up> <Nop>
-nmap <Down> <Nop>
+nnoremap <Right> <Nop>
+nnoremap <Left> <Nop>
+nnoremap <Up> <Nop>
+nnoremap <Down> <Nop>
 
-imap <Right> <Nop>
-imap <Left> <Nop>
-imap <Up> <Nop>
-imap <Down> <Nop>
-
+inoremap <Right> <Nop>
+inoremap <Left> <Nop>
+inoremap <Up> <Nop>
+inoremap <Down> <Nop>
+nnoremap <space> <Nop>
 " Jump between windows
-map <A-h> :wincmd h<CR>
-nmap <A-l> :wincmd l<CR>
-nmap <A-j> :wincmd j<CR>
-nmap <A-k> :wincmd k<CR>
+noremap <A-h> :wincmd h<CR>
+nnoremap <A-l> :wincmd l<CR>
+nnoremap <A-j> :wincmd j<CR>
+nnoremap <A-k> :wincmd k<CR>
 
 " NERDTree
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 0
 noremap <F12> :NERDTree<CR>
-nnoremap <leader>n :NERDTree<CR>
-nnoremap <leader>nt :NERDTreeToggle<CR>
-nmap <Leader>nf :NERDTreeFind<CR>
-nmap <Leader>nt :NERDTreeToggle <Esc>
+nnoremap <leader>ne :NERDTree<CR>
+nnoremap <Leader>nf :NERDTreeFind<CR>
+nnoremap <Leader>nt :NERDTreeToggle <Esc>
 
 "CtrlP (finder)
 let g:ctrlp_working_path_mode = 'ra'
-nmap <C-p> :CtrlP<CR>
+nnoremap <C-p> :CtrlP<CR>
 
 " Less compiler
 nnoremap <Leader>l :w <BAR> !lessc % > %:t:r.css<CR><space>
 
 " Coffee
-map <Leader>cj :CoffeeCompile vert <BAR> wincmd h<CR><ESC>
+autocmd FileType coffee nnoremap <Leader>cc :CoffeeCompile vert <BAR> wincmd h<CR><ESC>
 " ESC to clear higlight
 nnoremap <silent> <esc> :noh<cr><esc>
 " Saving
-nnoremap <leader>w :w<cr><esc>
-" Quitting
-nnoremap <leader>q :q<cr><esc>
-" Tab
-nmap <C-Tab> :tabnext<CR>
-nmap <C-S-Tab> :tabprevious<CR>
-map <C-S-Tab> :tabprevious<CR>
-map <C-Tab> :tabnext<CR>
-imap <C-S-Tab> <ESC>:tabprevious<CR>
-imap <C-Tab> <ESC>:tabnext<CR>
+nnoremap <leader>w Cw<cr><esc>
+  " Quitting
+  nnoremap <leader>q :q<cr><esc>
+  " Tab
+  nnoremap <C-Tab> :tabnext<CR>
+  nnoremap <C-S-Tab> :tabprevious<CR>
+  noremap <C-S-Tab> :tabprevious<CR>
+  noremap <C-Tab> :tabnext<CR>
+  inoremap <C-S-Tab> <ESC>:tabprevious<CR>
+inoremap <C-Tab> <ESC>:tabnext<CR>
 noremap <F7> :set expandtab!<CR>
-nmap <Leader>h :tabnew %:h<CR>
-"Window resizing
-nmap<silent><A-Right> :vertical resize +5<CR>
-nmap<silent><A-Left> :vertical resize -5<CR>
-" vimrc quick launch
-call SetupCommandAlias("evimrc","e ~/_vimrc")
-"marks
-nnoremap <Leader>, :marks<CR>
+nnoremap <Leader>tn :tabnew %:h<CR>
+noremap <Leader>gt :tabnext<CR>
 
+"Buffer operations
+noremap <Leader>q :q<CR>
+noremap <Leader>qa :qa<CR>
+noremap <Leader>w :w<CR>
+
+"Text operations
+function s:make_uppercase()
+  nnoremap <Leader>wu g~iw
+endfunction
+call s:make_uppercase()
+"Vertical rezise
+nnoremap <silent><C-right> :vertical resize +5<CR><ESC>
+nnoremap <silent><C-left> :vertical resize -5<CR><ESC>
+"yank to clipboard+
+
+"call SetupCommandAlias('evimrc', 'e ~/.dotfiles/vimrc')

@@ -10,7 +10,7 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'L9'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
-Plugin 'mattn/emmet-vim'
+"Plugin 'mattn/emmet-vim'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'groenewege/vim-less'
 Plugin 'tpope/vim-surround'
@@ -21,11 +21,16 @@ Plugin 'kchmck/vim-coffee-script'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'nanotech/jellybeans.vim'
-Plugin 'ryanoasis/vim-devicons'
+Plugin 'vim-scripts/taglist.vim'
+Plugin 'maksimr/vim-jsbeautify'
+Plugin 'rking/ag.vim'
+Plugin 'Chun-Yang/vim-action-ag'
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
+Plugin 'jlanzarotta/bufexplorer'
 "Plugin 'Decho'
-call vundle#end()            " required
-
-filetype plugin indent on    " required
+call vundle#end()
+filetype plugin indent on
 syntax on
 "
 " Brief help
@@ -34,36 +39,57 @@ syntax on
 " :PluginSearch foo - searches for foo; append `!` to refresh local cache
 " :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
 "
-" Functions
-function s:SetCursorLine()
+ "Functions
+function! s:SetCursorLine()
     set cursorline
     "hi cursorline cterm=none ctermbg=darkblue ctermfg=white gui=underline
 endfunction
-fun! SetupCommandAlias(from, to)
-  exec 'cnoreabbrev <expr> '.a:from
-        \ .' ((getcmdtype() is# ":" && getcmdline() is# "'.a:from.'")'
-        \ .'? ("'.a:to.'") : ("'.a:from.'"))'
-endfun
-function StartMaximized()
-  if has("gui_running")
-    " GUI is running or is about to start.
-    " Maximize gvim window.
-    set lines=999 columns=999
-  endif
-endfunction
-function HideToolBarsAndScrollBars()
+
+function! HideToolBarsAndScrollBars()
   set guioptions-=m  "remove menu bar
   set guioptions-=T  "remove toolbar
   set guioptions-=r  "remove right-hand scroll bar
   set guioptions-=L  "remove left-hand scroll bar
 endfunction
 
-call HideToolBarsAndScrollBars()
-call StartMaximized()
+function! FixAlt()
+  let c='a'
+  while c <= 'z'
+    exec "set <A-".c.">=\e".c
+    exec "imap \e".c." <A-".c.">"
+    let c = nr2char(1+char2nr(c))
+  endw
+
+  set timeout ttimeoutlen=50
+endfunction
+
+
+fun! SetupCommandAlias(from, to)
+  exec 'cnoreabbrev <expr> '.a:from
+        \ .' ((getcmdtype() is# ":" && getcmdline() is# "'.a:from.'")'
+        \ .'? ("'.a:to.'") : ("'.a:from.'"))'
+endfun
+
+function! AutoReloadVimrc()
+	augroup reload_vimrc " {
+			autocmd!
+			autocmd BufWritePost $MYVIMRC source $MYVIMRC
+	augroup END " }
+endfunction
+
+function! StartMaximized()
+  if has("gui_running")
+     "GUI is running or is about to start.
+     "Maximize gvim window.
+    set lines=999 columns=999
+  endif
+endfunction
+
+call FixAlt()
+call AutoReloadVimrc()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Editing setings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 " Enable filetype plugin
 filetype plugin on
 filetype indent on
@@ -172,7 +198,7 @@ let g:airline_theme='molokai'
 " Coffee
 
 " compile on save
-autocmd BufWritePost *.coffee :make! --compile
+autocmd BufWritePost *.coffee silent :make! --compile
 
 " LESS
 autocmd BufWritePost *.less exe '!lessc ' . shellescape(expand('<afile>')) . ' ' . shellescape(expand('<afile>:r')) . '.css'
@@ -188,8 +214,19 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
 " Auto center search
-:nmap n nzz  
-:nmap p pzz
+:nnoremap n nzz  
+:nnoremap p pzz
+
+"UltiSnip
+"Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+"let g:UltiSnipsSnippetsDir="/home/antti/.vim/bundle/vim-snippets/UltiSnips/"
+let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/bundle/vim-snippets/UltiSnips']
+
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
 
 let mapleader = " "  " make leader , instead of \
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -202,71 +239,96 @@ inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
 inoremap <expr> <PageDown> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<PageDown>"
 inoremap <expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<PageUp>"
 
-" For highlighting trailing whitespaces
+"" For highlighting trailing whitespaces
 nnoremap <Leader>wn :match ExtraWhitespace /^\s* \s*\<Bar>\s\+$/<CR>
 nnoremap <Leader>wf :match<CR>
 
-" Disable arrows
-nmap <Right> <Nop>
-nmap <Left> <Nop>
-nmap <Up> <Nop>
-nmap <Down> <Nop>
+"" Disable arrows
+nnoremap <Right> <Nop>
+nnoremap <Left> <Nop>
+nnoremap <Up> <Nop>
+nnoremap <Down> <Nop>
 
-imap <Right> <Nop>
-imap <Left> <Nop>
-imap <Up> <Nop>
-imap <Down> <Nop>
+inoremap <Right> <Nop>
+inoremap <Left> <Nop>
+inoremap <Up> <Nop>
+inoremap <Down> <Nop>
 
-" Jump between windows
-map <A-h> :wincmd h<CR>
-nmap <A-l> :wincmd l<CR>
-nmap <A-j> :wincmd j<CR>
-nmap <A-k> :wincmd k<CR>
+"" Jump between windows
+noremap <A-h> :wincmd h<CR>
+nnoremap <A-l> :wincmd l<CR>
+nnoremap <A-j> :wincmd j<CR>
+nnoremap <A-k> :wincmd k<CR>
 
-" NERDTree
+"" NERDTree
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 0
 noremap <F12> :NERDTree<CR>
 nnoremap <leader>ne :NERDTree<CR>
-nmap <Leader>nf :NERDTreeFind<CR>
-nmap <Leader>nt :NERDTreeToggle <Esc>
+nnoremap <Leader>n :NERDTreeFind<CR>
+nnoremap <Leader>nt :NERDTreeToggle <Esc>
 
-"CtrlP (finder)
+""CtrlP (finder)
 let g:ctrlp_working_path_mode = 'ra'
-nmap <C-p> :CtrlP<CR>
+nnoremap <C-p> :CtrlP<CR>
+nnoremap <leader>. :CtrlPTag<CR>
 
-" Less compiler
+"" Less compiler
 nnoremap <Leader>l :w <BAR> !lessc % > %:t:r.css<CR><space>
 
-" Coffee
-map <Leader>cj :CoffeeCompile vert <BAR> wincmd h<CR><ESC>
-" ESC to clear higlight
-nnoremap <silent> <esc> :noh<cr><esc>
+"" Coffee
+noremap <silent><Leader>c :CoffeeWatch vert<CR>
+
+"Clear highlights
+nnoremap <f3> :set hlsearch!<CR>
 " Saving
 nnoremap <leader>w :w<cr><esc>
 " Quitting
 nnoremap <leader>q :q<cr><esc>
-" Tab
-nmap <C-Tab> :tabnext<CR>
-nmap <C-S-Tab> :tabprevious<CR>
-map <C-S-Tab> :tabprevious<CR>
-map <C-Tab> :tabnext<CR>
-imap <C-S-Tab> <ESC>:tabprevious<CR>
-imap <C-Tab> <ESC>:tabnext<CR>
+"" Tab
+nnoremap <C-Tab> :tabnext<CR>
+nnoremap <C-S-Tab> :tabprevious<CR>
+noremap <C-S-Tab> :tabprevious<CR>
+noremap <C-Tab> :tabnext<CR>
+inoremap <C-S-Tab> <ESC>:tabprevious<CR>
+inoremap <C-Tab> <ESC>:tabnext<CR>
 noremap <F7> :set expandtab!<CR>
-nmap <Leader>tn :tabnew %:h<CR>
-map <Leader>gt :tabnext<CR>
+nnoremap <Leader>tn :tabnew %:h<CR>
+noremap <Leader>gt :tabnext<CR>
+
+"js-beautify
+autocmd FileType javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
+autocmd FileType json noremap <buffer> <c-f> :call JsonBeautify()<cr>
+autocmd FileType jsx noremap <buffer> <c-f> :call JsxBeautify()<cr>
+autocmd FileType html noremap <buffer> <c-f> :call HtmlBeautify()<cr>
+autocmd FileType css noremap <buffer> <c-f> :call CSSBeautify()<cr>
+autocmd FileType javascript vnoremap <buffer>  <c-f> :call RangeJsBeautify()<cr>
+autocmd FileType json vnoremap <buffer> <c-f> :call RangeJsonBeautify()<cr>
+autocmd FileType jsx vnoremap <buffer> <c-f> :call RangeJsxBeautify()<cr>
+autocmd FileType html vnoremap <buffer> <c-f> :call RangeHtmlBeautify()<cr>
+autocmd FileType css vnoremap <buffer> <c-f> :call RangeCSSBeautify()<cr>
 
 "Buffer operations
-map <Leader>q :q<CR>
-map <Leader>qa :qa<CR>
-map <Leader>w :w<CR>
+noremap <Leader>q :q<CR>
+noremap <Leader>qa :qa<CR>
+noremap <Leader>w :w<CR>
 
 "Text operations
-function s:make_uppercase()
-  nmap <Leader>wu g~iw
+function! s:make_uppercase()
+  nnoremap <Leader>wu g~iw
 endfunction
 call s:make_uppercase()
 
 "yank to clipboard+
 vmap <C-c> "+y 
+
+"Vertical rezise
+nnoremap <silent><A-right> :vertical resize +5<CR><ESC>
+nnoremap <silent><A-left> :vertical resize -5<CR><ESC>
+
+"Clear search hilight
+nnoremap <silent> <Leader>/ :nohlsearch<CR>
+
+"find and replace under cursor
+nnoremap <leader>s :%s/<c-r><c-w>/
+
