@@ -10,7 +10,7 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'L9'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
-Plugin 'mattn/emmet-vim'
+"Plugin 'mattn/emmet-vim'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'groenewege/vim-less'
 Plugin 'tpope/vim-surround'
@@ -22,13 +22,16 @@ Plugin 'scrooloose/nerdcommenter'
 Plugin 'kchmck/vim-coffee-script'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
+"Plugin 'nanotech/jellybeans.vim'
 Plugin 'notpratheek/vim-luna'
+Plugin 'vim-scripts/taglist.vim'
 Plugin 'maksimr/vim-jsbeautify'
 Plugin 'rking/ag.vim'
 Plugin 'majutsushi/tagbar'
 Plugin 'PProvost/vim-ps1'
 Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'Raimondi/delimitMate'
+Plugin 'jlanzarotta/bufexplorer'
 "Plugin 'vim-scripts/TFS'
 "Plugin 'ryanoasis/vim-devicons'
 call vundle#end()            " required
@@ -203,8 +206,8 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_javascript_checkers = ['jshint']
 " Auto center search
-:nmap n nzz
-:nmap p pzz
+:nnoremap n nzz  
+:nnoremap p pzz
 
 "CtrlP
 let g:ctrlp_custom_ignore = {

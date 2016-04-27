@@ -28,6 +28,7 @@ Plugin 'Chun-Yang/vim-action-ag'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'jlanzarotta/bufexplorer'
+Plugin 'nathanaelkane/vim-indent-guides'
 "Plugin 'Decho'
 call vundle#end()
 filetype plugin indent on
@@ -228,6 +229,9 @@ let g:UltiSnipsSnippetDirectories=[$HOME.'/.vim/bundle/vim-snippets/UltiSnips']
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
 
+" Indent guides
+let g:indent_guides_enable_on_vim_startup = 1
+
 let mapleader = " "  " make leader , instead of \
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Key mappings
@@ -308,6 +312,13 @@ autocmd FileType jsx vnoremap <buffer> <c-f> :call RangeJsxBeautify()<cr>
 autocmd FileType html vnoremap <buffer> <c-f> :call RangeHtmlBeautify()<cr>
 autocmd FileType css vnoremap <buffer> <c-f> :call RangeCSSBeautify()<cr>
 
+nnoremap <F2> :buffers<CR>:buffer<Space>
+nnoremap <leader>. :CtrlPTag<cr>
+
+"rename under cursor
+nnoremap <Leader>s :%s/\<<C-r><C-w>\>/
+nnoremap <f5> :source ~/_vimrc<cr>
+
 "Buffer operations
 noremap <Leader>q :q<CR>
 noremap <Leader>qa :qa<CR>
@@ -332,3 +343,7 @@ nnoremap <silent> <Leader>/ :nohlsearch<CR>
 "find and replace under cursor
 nnoremap <leader>s :%s/<c-r><c-w>/
 
+"ag searcher
+nnoremap <leader>f :Ag
+"tagbar
+nnoremap <F8> :TagbarToggle<CR>
