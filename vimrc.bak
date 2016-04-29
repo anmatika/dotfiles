@@ -217,8 +217,6 @@ let g:syntastic_check_on_wq = 0
 :nnoremap n nzz  
 :nnoremap p pzz
 
-set runtimepath+=~/.vim/bundle/ultisnips
-
 "UltiSnip
 "Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
 "let g:UltiSnipsSnippetsDir="$HOME/.vim/bundle/vim-snippets/UltiSnips/"
