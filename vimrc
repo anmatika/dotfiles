@@ -333,7 +333,7 @@ call s:make_uppercase()
 "yank to clipboard+
 vmap <C-c> "+y 
 
-nnoremap <F2> :buffers<CR>:buffer<Space>
+nnoremap <silent> <F2> :BufExplorer<CR>
 
 " Maps Alt-[h,j,k,l] to resizing a window split
 map <silent> <A-h> <C-w><
