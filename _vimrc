@@ -10,7 +10,7 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'L9'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
-Plugin 'mattn/emmet-vim'
+"Plugin 'mattn/emmet-vim'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'groenewege/vim-less'
 Plugin 'tpope/vim-surround'
@@ -22,8 +22,22 @@ Plugin 'scrooloose/nerdcommenter'
 Plugin 'kchmck/vim-coffee-script'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
+"Plugin 'nanotech/jellybeans.vim'
 Plugin 'notpratheek/vim-luna'
-
+Plugin 'vim-scripts/taglist.vim'
+Plugin 'maksimr/vim-jsbeautify'
+Plugin 'rking/ag.vim'
+Plugin 'majutsushi/tagbar'
+Plugin 'PProvost/vim-ps1'
+Plugin 'nathanaelkane/vim-indent-guides'
+Plugin 'Raimondi/delimitMate'
+Plugin 'jlanzarotta/bufexplorer'
+Plugin 'godlygeek/tabular'
+Plugin 'plasticboy/vim-markdown'
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
+"Plugin 'vim-scripts/TFS'
+"Plugin 'ryanoasis/vim-devicons'
 call vundle#end()            " required
 "
 " Brief help
@@ -39,12 +53,14 @@ call vundle#end()            " required
 " Enable filetype plugin
 filetype plugin on
 filetype indent on
+set omnifunc=syntaxcomplete#Complete
 set encoding=utf-8
 setglobal fileencoding=utf-8
   "setglobal bomb
 set fileencodings=ucs-bom,utf-8,latin1
 syntax on
 set paste
+let g:airline_powerline_fonts=1
 
 " Filetypes and encoding
 set fileformats=unix,dos,mac
@@ -75,10 +91,13 @@ set visualbell
 " Tabbing, Default to 2 spaces as tabs
 set cino=:0g0(0,W2
 set expandtab
-set tabstop=2
-set softtabstop=2
+set tabstop=4
+set softtabstop=4
 set shiftwidth=2
 
+"set foldmethod=syntax
+"set foldlevelstart=1
+"let javaScript_fold=1         " JavaScript
 " Filetype sesific
 "au FileType python setlocal tabstop=4 softtabstop=4 shiftwidth=4
 
@@ -107,12 +126,12 @@ set linespace=0                      " Don't insert any extra pixel lines
 set lazyredraw                       " Don't redraw while running macros
 set wildmenu                         " Wild menu
 set wildmode=longest,list,full       " Wild menu options
-
+set timeoutlen=1000 ttimeoutlen=0
 " Display special characters and helpers
 set list
 " Show < or > when characters are not displayed on the left or right.
 " Also show tabs and trailing spaces.
-set list listchars=nbsp:¬,tab:»»,trail:.,precedes:<,extends:>
+set list listchars=nbsp:¬,tab:\ \ ,trail:.,precedes:<,extends:>
 " Statusline
 " set statusline=%F%m%r%h%w[%L][%{&ff}]%y[%p%%][%04l,%04v]
 "              | | | | |  |   |      |  |     |    |
@@ -160,6 +179,35 @@ function HideToolBarsAndScrollBars()
   set guioptions-=L  "remove left-hand scroll bar
 endfunction
 
+function! DoPrettyXML()
+  " save the filetype so we can restore it later
+  let l:origft = &ft
+  set ft=
+  " delete the xml header if it exists. This will
+  " permit us to surround the document with fake tags
+  " without creating invalid xml.
+  1s/<?xml .*?>//e
+  " insert fake tags around the entire document.
+  " This will permit us to pretty-format excerpts of
+  " XML that may contain multiple top-level elements.
+  0put ='<PrettyXML>'
+  $put ='</PrettyXML>'
+  silent %!xmllint --format -
+  " xmllint will insert an <?xml?> header. it's easy enough to delete
+  " if you don't want it.
+  " delete the fake tags
+  2d
+  $d
+  " restore the 'normal' indentation, which is one extra level
+  " too deep due to the extra tags we wrapped around the document.
+  silent %<
+  " back to home
+  1
+  " restore the filetype
+  exe "set ft=" . l:origft
+endfunction
+command! PrettyXML call DoPrettyXML()
+
 call HideToolBarsAndScrollBars()
 call StartMaximized()
 
@@ -171,10 +219,12 @@ autocmd VimEnter * call s:SetCursorLine()
 set laststatus=2
 let g:airline#extensions#tabline#enabled=1
 
-" Coffee
-
+"Coffee
+"get standard two-space indentation
+autocmd BufNewFile,BufReadPost *.coffee setl shiftwidth=2 expandtab
 " compile on save
-autocmd BufWritePost *.coffee :make! --compile
+autocmd BufWritePost *.coffee :silent make! --compile
+
 " LESS
 autocmd BufWritePost *.less exe '!lessc ' . shellescape(expand('<afile>')) . ' ' . shellescape(expand('<afile>:r')) . '.css'
 
@@ -187,10 +237,41 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+let g:syntastic_javascript_checkers = ['jshint']
+let g:syntastic_quiet_messages = { "level": "warnings" }
 
 " Auto center search
-:nmap n nzz  
-:nmap p pzz
+:nnoremap n nzz  
+:nnoremap p pzz
+
+"CtrlP
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|hg|svn|node_modules)$',
+  \ 'file': '\v\.(exe|so|dll|generated.cs)$',
+  \ 'link': 'some_bad_symbolic_links',
+  \ }
+
+" Indent guides
+let g:indent_guides_enable_on_vim_startup = 1
+
+"JsBeautify
+autocmd FileType javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
+autocmd FileType json noremap <buffer> <c-f> :call JsonBeautify()<cr>
+autocmd FileType jsx noremap <buffer> <c-f> :call JsxBeautify()<cr>
+autocmd FileType html noremap <buffer> <c-f> :call HtmlBeautify()<cr>
+autocmd FileType css noremap <buffer> <c-f> :call CSSBeautify()<cr>
+autocmd FileType javascript vnoremap <buffer>  <c-f> :call RangeJsBeautify()<cr>
+autocmd FileType json vnoremap <buffer> <c-f> :call RangeJsonBeautify()<cr>
+autocmd FileType jsx vnoremap <buffer> <c-f> :call RangeJsxBeautify()<cr>
+autocmd FileType html vnoremap <buffer> <c-f> :call RangeHtmlBeautify()<cr>
+autocmd FileType css vnoremap <buffer> <c-f> :call RangeCSSBeautify()<cr>
+
+" UltiSnips
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
 
 let mapleader = " "  " make leader , instead of \
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -206,7 +287,6 @@ inoremap <expr> <PageUp>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<PageUp>"
 " For highlighting trailing whitespaces
 nnoremap <Leader>wn :match ExtraWhitespace /^\s* \s*\<Bar>\s\+$/<CR>
 nnoremap <Leader>wf :match<CR>
-
 " Disable arrows
 nmap <Right> <Nop>
 nmap <Left> <Nop>
@@ -229,11 +309,10 @@ let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 0
 noremap <F12> :NERDTree<CR>
 nnoremap <leader>ne :NERDTree<CR>
-nmap <Leader>nf :NERDTreeFind<CR>
-nmap <Leader>nt :NERDTreeToggle <Esc>
+nmap <silent><Leader>n :NERDTreeFind<CR>
+nmap <silent><Leader>nt :NERDTreeToggle <Esc>
 
 "CtrlP (finder)
-let g:ctrlp_working_path_mode = 'ra'
 nmap <C-p> :CtrlP<CR>
 nnoremap <Leader>. :CtrlPTag<CR>
 " Less compiler
@@ -244,9 +323,9 @@ autocmd FileType coffee nnoremap <Leader>cc :CoffeeCompile vert <BAR> wincmd h<C
 " ESC to clear higlight
 nnoremap <silent> <esc> :noh<cr><esc>
 " Saving
-nnoremap <leader>w :w<cr><esc>
+nnoremap <leader>w :w<cr>
 " Quitting
-nnoremap <leader>q :q<cr><esc>
+nnoremap <leader>q :q<cr>
 " Tab
 nmap <C-Tab> :tabnext<CR>
 nmap <C-S-Tab> :tabprevious<CR>
@@ -274,4 +353,39 @@ nnoremap <silent><A-left> :vertical resize -5<CR><ESC>
 "yank to clipboard+
 vmap <C-c> "+y 
 
+nnoremap <F2> :buffers<CR>:buffer<Space>
+nnoremap <leader>. :CtrlPTag<cr>
+
+"coffee 
+nnoremap <silent> <leader>c :CoffeeWatch vert<cr>
+"ag searcher
+nnoremap <leader>f :Ag
+
+nnoremap <leader>x :SyntasticReset<cr>
+
+"rename under cursor
+nnoremap <Leader>s :%s/\<<C-r><C-w>\>/
+nnoremap <f5> :source ~/_vimrc<cr>
+
+"tagbar
+nnoremap <F8> :TagbarToggle<CR>
+
+"JsBeautify
+noremap <c-f> :call JsBeautify()<cr>
+
+" Maps Alt-[h,j,k,l] to resizing a window split
+map <silent> <A-h> <C-w><
+map <silent> <A-j> <C-W>-
+map <silent> <A-k> <C-W>+
+map <silent> <A-l> <C-w>>
+" Maps Alt-[s.v] to horizontal and vertical split respectively
+map <silent> <A-s> :split<CR>
+map <silent> <A-v> :vsplit<CR>
+" Maps Alt-[n,p] for moving next and previous window respectively
+map <silent> <A-n> <C-w><C-w>
+map <silent> <A-p> <C-w><S-w>
+
+
+
 call SetupCommandAlias('evimrc', 'e ~/dotfiles/_vimrc')
+call SetupCommandAlias('ewebdev', 'e c:/development/current/sievoweb/sievo.ppm/')
