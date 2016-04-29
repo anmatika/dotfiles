@@ -213,6 +213,8 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+let g:syntastic_javascript_checkers = ['jshint']
+let g:syntastic_quiet_messages = { "level": "warnings" }
 
 " Auto center search
 :nnoremap n nzz  
@@ -223,13 +225,9 @@ set runtimepath+=~/.vim/bundle/ultisnips
 "UltiSnip
 "Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
 "let g:UltiSnipsSnippetsDir="$HOME/.vim/bundle/vim-snippets/UltiSnips/"
-let g:UltiSnipsSnippetDirectories=['$HOME/.vim/bundle/vim-snippets/UltiSnips']
-let g:UltiSnipsUsePythonVersion = 2
 let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-" If you want :UltiSnipsEdit to split your window.
-let g:UltiSnipsEditSplit="vertical"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 " Indent guides
 let g:indent_guides_enable_on_vim_startup = 1
@@ -335,9 +333,19 @@ call s:make_uppercase()
 "yank to clipboard+
 vmap <C-c> "+y 
 
-"Vertical rezise
-nnoremap <silent><A-right> :vertical resize +5<CR><ESC>
-nnoremap <silent><A-left> :vertical resize -5<CR><ESC>
+nnoremap <F2> :buffers<CR>:buffer<Space>
+
+" Maps Alt-[h,j,k,l] to resizing a window split
+map <silent> <A-h> <C-w><
+map <silent> <A-j> <C-W>-
+map <silent> <A-k> <C-W>+
+map <silent> <A-l> <C-w>>
+" Maps Alt-[s.v] to horizontal and vertical split respectively
+map <silent> <A-s> :split<CR>
+map <silent> <A-v> :vsplit<CR>
+" Maps Alt-[n,p] for moving next and previous window respectively
+map <silent> <A-n> <C-w><C-w>
+map <silent> <A-p> <C-w><S-w>
 
 "Clear search hilight
 nnoremap <silent> <Leader>/ :nohlsearch<CR>
