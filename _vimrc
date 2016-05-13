@@ -36,6 +36,8 @@ Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
+Plugin 'Valloric/YouCompleteMe'
+"Plugin 'lukaszkorecki/CoffeeTags'
 "Plugin 'vim-scripts/TFS'
 "Plugin 'ryanoasis/vim-devicons'
 call vundle#end()            " required
@@ -156,7 +158,7 @@ au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 au InsertLeave * match ExtraWhitespace /\s\+$/
 
 " Functions
-function s:SetCursorLine()
+function! s:SetCursorLine()
     set cursorline
     "hi cursorline cterm=none ctermbg=darkblue ctermfg=white gui=underline
 endfunction
@@ -165,14 +167,14 @@ fun! SetupCommandAlias(from, to)
         \ .' ((getcmdtype() is# ":" && getcmdline() is# "'.a:from.'")'
         \ .'? ("'.a:to.'") : ("'.a:from.'"))'
 endfun
-function StartMaximized()
+function! StartMaximized()
   if has("gui_running")
     " GUI is running or is about to start.
     " Maximize gvim window.
     set lines=999 columns=999
   endif
 endfunction
-function HideToolBarsAndScrollBars()
+function! HideToolBarsAndScrollBars()
   set guioptions-=m  "remove menu bar
   set guioptions-=T  "remove toolbar
   set guioptions-=r  "remove right-hand scroll bar
@@ -343,17 +345,15 @@ map <Leader>qa :qa<CR>
 map <Leader>w :w<CR>
 
 "Text operations
-function s:make_uppercase()
+function! s:make_uppercase()
   nmap <Leader>wu g~iw
 endfunction
 call s:make_uppercase()
-"Vertical rezise
-nnoremap <silent><A-right> :vertical resize +5<CR><ESC>
-nnoremap <silent><A-left> :vertical resize -5<CR><ESC>
+
 "yank to clipboard+
 vmap <C-c> "+y 
 
-nnoremap <F2> :buffers<CR>:buffer<Space>
+nnoremap <silent> <F2> :BufExplorer<CR>>
 nnoremap <leader>. :CtrlPTag<cr>
 
 "coffee 
@@ -385,7 +385,8 @@ map <silent> <A-v> :vsplit<CR>
 map <silent> <A-n> <C-w><C-w>
 map <silent> <A-p> <C-w><S-w>
 
-
+"remove ^M marks
+nnoremap <leader> rm :%s/\r//
 
 call SetupCommandAlias('evimrc', 'e ~/dotfiles/_vimrc')
 call SetupCommandAlias('ewebdev', 'e c:/development/current/sievoweb/sievo.ppm/')
