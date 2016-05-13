@@ -10,7 +10,7 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'L9'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
-Plugin 'mattn/emmet-vim'
+"Plugin 'mattn/emmet-vim'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'groenewege/vim-less'
 Plugin 'tpope/vim-surround'
@@ -22,10 +22,16 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'nanotech/jellybeans.vim'
 Plugin 'vim-scripts/taglist.vim'
+Plugin 'maksimr/vim-jsbeautify'
+Plugin 'rking/ag.vim'
+Plugin 'Chun-Yang/vim-action-ag'
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
+Plugin 'jlanzarotta/bufexplorer'
+Plugin 'nathanaelkane/vim-indent-guides'
 "Plugin 'Decho'
-call vundle#end()            " required
-
-filetype plugin indent on    " required
+call vundle#end()
+filetype plugin indent on
 syntax on
 "
 " Brief help
@@ -35,19 +41,19 @@ syntax on
 " :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
 "
  "Functions
-function s:SetCursorLine()
+function! s:SetCursorLine()
     set cursorline
     "hi cursorline cterm=none ctermbg=darkblue ctermfg=white gui=underline
 endfunction
 
-function HideToolBarsAndScrollBars()
+function! HideToolBarsAndScrollBars()
   set guioptions-=m  "remove menu bar
   set guioptions-=T  "remove toolbar
   set guioptions-=r  "remove right-hand scroll bar
   set guioptions-=L  "remove left-hand scroll bar
 endfunction
 
-function FixAlt()
+function! FixAlt()
   let c='a'
   while c <= 'z'
     exec "set <A-".c.">=\e".c
@@ -58,7 +64,6 @@ function FixAlt()
   set timeout ttimeoutlen=50
 endfunction
 
-call FixAlt()
 
 fun! SetupCommandAlias(from, to)
   exec 'cnoreabbrev <expr> '.a:from
@@ -66,7 +71,14 @@ fun! SetupCommandAlias(from, to)
         \ .'? ("'.a:to.'") : ("'.a:from.'"))'
 endfun
 
-function StartMaximized()
+function! AutoReloadVimrc()
+	augroup reload_vimrc " {
+			autocmd!
+			autocmd BufWritePost $MYVIMRC source $MYVIMRC
+	augroup END " }
+endfunction
+
+function! StartMaximized()
   if has("gui_running")
      "GUI is running or is about to start.
      "Maximize gvim window.
@@ -74,6 +86,8 @@ function StartMaximized()
   endif
 endfunction
 
+call FixAlt()
+call AutoReloadVimrc()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Editing setings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -185,7 +199,7 @@ let g:airline_theme='molokai'
 " Coffee
 
 " compile on save
-autocmd BufWritePost *.coffee :make! --compile
+autocmd BufWritePost *.coffee silent :make! --compile
 
 " LESS
 autocmd BufWritePost *.less exe '!lessc ' . shellescape(expand('<afile>')) . ' ' . shellescape(expand('<afile>:r')) . '.css'
@@ -199,10 +213,24 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+let g:syntastic_javascript_checkers = ['jshint']
+let g:syntastic_quiet_messages = { "level": "warnings" }
 
 " Auto center search
 :nnoremap n nzz  
 :nnoremap p pzz
+
+set runtimepath+=~/.vim/bundle/ultisnips
+
+"UltiSnip
+"Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+"let g:UltiSnipsSnippetsDir="$HOME/.vim/bundle/vim-snippets/UltiSnips/"
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" Indent guides
+let g:indent_guides_enable_on_vim_startup = 1
 
 let mapleader = " "  " make leader , instead of \
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -241,20 +269,22 @@ let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 0
 noremap <F12> :NERDTree<CR>
 nnoremap <leader>ne :NERDTree<CR>
-nnoremap <Leader>nf :NERDTreeFind<CR>
+nnoremap <Leader>n :NERDTreeFind<CR>
 nnoremap <Leader>nt :NERDTreeToggle <Esc>
 
 ""CtrlP (finder)
 let g:ctrlp_working_path_mode = 'ra'
 nnoremap <C-p> :CtrlP<CR>
+nnoremap <leader>. :CtrlPTag<CR>
 
 "" Less compiler
 nnoremap <Leader>l :w <BAR> !lessc % > %:t:r.css<CR><space>
 
 "" Coffee
-noremap <Leader>cj :CoffeeCompile vert <BAR> wincmd h<CR><ESC>
+noremap <silent><Leader>c :CoffeeWatch vert<CR>
+
 "Clear highlights
-nnoremap <F3> :set hlsearch!<CR>
+nnoremap <f3> :set hlsearch!<CR>
 " Saving
 nnoremap <leader>w :w<cr><esc>
 " Quitting
@@ -270,13 +300,32 @@ noremap <F7> :set expandtab!<CR>
 nnoremap <Leader>tn :tabnew %:h<CR>
 noremap <Leader>gt :tabnext<CR>
 
+"js-beautify
+autocmd FileType javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
+autocmd FileType json noremap <buffer> <c-f> :call JsonBeautify()<cr>
+autocmd FileType jsx noremap <buffer> <c-f> :call JsxBeautify()<cr>
+autocmd FileType html noremap <buffer> <c-f> :call HtmlBeautify()<cr>
+autocmd FileType css noremap <buffer> <c-f> :call CSSBeautify()<cr>
+autocmd FileType javascript vnoremap <buffer>  <c-f> :call RangeJsBeautify()<cr>
+autocmd FileType json vnoremap <buffer> <c-f> :call RangeJsonBeautify()<cr>
+autocmd FileType jsx vnoremap <buffer> <c-f> :call RangeJsxBeautify()<cr>
+autocmd FileType html vnoremap <buffer> <c-f> :call RangeHtmlBeautify()<cr>
+autocmd FileType css vnoremap <buffer> <c-f> :call RangeCSSBeautify()<cr>
+
+nnoremap <F2> :buffers<CR>:buffer<Space>
+nnoremap <leader>. :CtrlPTag<cr>
+
+"rename under cursor
+nnoremap <Leader>s :%s/\<<C-r><C-w>\>/
+nnoremap <f5> :source ~/_vimrc<cr>
+
 "Buffer operations
 noremap <Leader>q :q<CR>
 noremap <Leader>qa :qa<CR>
 noremap <Leader>w :w<CR>
 
 "Text operations
-function s:make_uppercase()
+function! s:make_uppercase()
   nnoremap <Leader>wu g~iw
 endfunction
 call s:make_uppercase()
@@ -284,8 +333,27 @@ call s:make_uppercase()
 "yank to clipboard+
 vmap <C-c> "+y 
 
-"Vertical rezise
-nnoremap <silent><A-right> :vertical resize +5<CR><ESC>
-nnoremap <silent><A-left> :vertical resize -5<CR><ESC>
+nnoremap <silent> <F2> :BufExplorer<CR>
 
-call SetupCommandAlias('evimrc', 'e ~/.dotfiles/vimrc')
+" Maps Alt-[h,j,k,l] to resizing a window split
+map <silent> <A-h> <C-w><
+map <silent> <A-j> <C-W>-
+map <silent> <A-k> <C-W>+
+map <silent> <A-l> <C-w>>
+" Maps Alt-[s.v] to horizontal and vertical split respectively
+map <silent> <A-s> :split<CR>
+map <silent> <A-v> :vsplit<CR>
+" Maps Alt-[n,p] for moving next and previous window respectively
+map <silent> <A-n> <C-w><C-w>
+map <silent> <A-p> <C-w><S-w>
+
+"Clear search hilight
+nnoremap <silent> <Leader>/ :nohlsearch<CR>
+
+"find and replace under cursor
+nnoremap <leader>s :%s/<c-r><c-w>/
+
+"ag searcher
+nnoremap <leader>f :Ag
+"tagbar
+nnoremap <F8> :TagbarToggle<CR>
