@@ -29,6 +29,7 @@ Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'jlanzarotta/bufexplorer'
 Plugin 'nathanaelkane/vim-indent-guides'
+Plugin 'Valloric/YouCompleteMe'
 "Plugin 'Decho'
 call vundle#end()
 filetype plugin indent on
@@ -95,7 +96,6 @@ call AutoReloadVimrc()
 filetype plugin on
 filetype indent on
 syntax on
-set paste
 
 " Filetypes and encoding
 set fileformats=unix,dos,mac
@@ -225,7 +225,7 @@ set runtimepath+=~/.vim/bundle/ultisnips
 "UltiSnip
 "Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
 "let g:UltiSnipsSnippetsDir="$HOME/.vim/bundle/vim-snippets/UltiSnips/"
-let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsExpandTrigger="<c-j>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 

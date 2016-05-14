@@ -5,12 +5,6 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-alias ls='ls --color=auto --format=long'
-alias l='ls -lh'
-alias vi='vim'
-alias emvimrc='vim ~/.vimrc'
-source ~/.aliases
-
 export VISUAL=vim; 
 export EDITOR="$VISUAL"
 source /home/antti/.bash_colors
@@ -37,4 +31,5 @@ fi
 export NVM_DIR="/home/antti/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 source ~/.dotfiles/.functions
+source ~/.dotfiles/aliases
 

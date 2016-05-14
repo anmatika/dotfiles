@@ -1,0 +1,9 @@
+#!/bin/bash
+alias gh='cd ~/'
+alias evimrc='vim ~/.vimrc'
+alias ebashrc='vim ~/.bashrc'
+alias cdgpio='cd ~/code/pi/gpio/'
+alias ls='ls --color=auto --format=long'
+alias l='ls -lh'
+alias vi='vim'
+alias ecasperjs='vim /usr/lib/node_modules/casperjs/modules'
