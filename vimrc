@@ -30,6 +30,7 @@ Plugin 'honza/vim-snippets'
 Plugin 'jlanzarotta/bufexplorer'
 Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'Valloric/YouCompleteMe'
+Plugin 'roman/golden-ratio'
 "Plugin 'Decho'
 call vundle#end()
 filetype plugin indent on
@@ -220,11 +221,12 @@ let g:syntastic_quiet_messages = { "level": "warnings" }
 :nnoremap n nzz  
 :nnoremap p pzz
 
-set runtimepath+=~/.vim/bundle/ultisnips
+"set runtimepath+=~/.vim/bundle/ultisnips
 
 "UltiSnip
 "Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-"let g:UltiSnipsSnippetsDir="$HOME/.vim/bundle/vim-snippets/UltiSnips/"
+let g:UltiSnipsSnippetDirectories=["myultisnips", "UltiSnips"]
+let g:UltiSnipsSnippetsDir=["~/.dotfiles/myultisnips/"]
 let g:UltiSnipsExpandTrigger="<c-j>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
@@ -232,7 +234,11 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 " Indent guides
 let g:indent_guides_enable_on_vim_startup = 1
 
+let g:netrw_browsex_viewer="chromium"
 let mapleader = " "  " make leader , instead of \
+" Don't resize automatically.
+ let g:golden_ratio_autocommand = 0
+"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Key mappings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -357,3 +363,8 @@ nnoremap <leader>s :%s/<c-r><c-w>/
 nnoremap <leader>f :Ag
 "tagbar
 nnoremap <F8> :TagbarToggle<CR>
+"
+"gold ratio split resize
+"nnoremap <leader>r <Plug>(golden_ratio_resize)
+nnoremap <leader>r :GoldenRatioResize<cr>
+

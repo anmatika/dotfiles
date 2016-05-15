@@ -1,0 +1,4 @@
+snippet casperecho "casper.echo"
+casper.echo(${1:msg});
+endsnippet
+
