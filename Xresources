@@ -11,3 +11,7 @@ xterm*background: #181818
 xterm*foreground: #c0c0c0
 xterm*cursorColor: #93a1a1
 
+XTerm*selectToClipboard: true
+term*VT100.Translations: #override \
+Ctrl Shift <Key>V:    insert-selection(CLIPBOARD) \n\
+Ctrl Shift <Key>C:    copy-selection(CLIPBOARD)
