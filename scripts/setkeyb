@@ -1,0 +1,9 @@
+#!/bin/bash
+param="$1"
+if [[ -z "$1" ]]; then
+	echo please give param
+	read param
+fi
+setxkbmap $param
+echo keyboard lang set to $param
+

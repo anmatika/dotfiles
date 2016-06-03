@@ -1,0 +1,6 @@
+Successfully initialized wpa_supplicant
+Failed to open config file '/root/Documents/antti.conf', error: Permission denied
+Failed to read or parse configuration '/root/Documents/antti.conf'.
+Successfully initialized wpa_supplicant
+Failed to open config file '/root/Documents/antti.conf', error: Permission denied
+Failed to read or parse configuration '/root/Documents/antti.conf'.
