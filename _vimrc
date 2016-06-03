@@ -37,6 +37,8 @@ Plugin 'plasticboy/vim-markdown'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'Valloric/YouCompleteMe'
+Plugin 'roman/golden-ratio'
+Plugin 'justincampbell/vim-eighties'
 "Plugin 'lukaszkorecki/CoffeeTags'
 "Plugin 'vim-scripts/TFS'
 "Plugin 'ryanoasis/vim-devicons'
@@ -92,11 +94,13 @@ set visualbell
 
 " Tabbing, Default to 2 spaces as tabs
 set cino=:0g0(0,W2
-set expandtab
+" show existing tab with 4 spaces width
 set tabstop=4
+" when indenting with '>', use 4 spaces width
+set shiftwidth=4
+" On pressing tab, insert 4 spaces
+set expandtab
 set softtabstop=4
-set shiftwidth=2
-
 "set foldmethod=syntax
 "set foldlevelstart=1
 "let javaScript_fold=1         " JavaScript
@@ -181,6 +185,16 @@ function! HideToolBarsAndScrollBars()
   set guioptions-=L  "remove left-hand scroll bar
 endfunction
 
+function! RestoreRegister()
+  let @" = s:restore_reg
+  return ''
+endfunction
+
+function! s:Repl()
+    let s:restore_reg = @"
+    return "p@=RestoreRegister()\<cr>"
+endfunction
+
 function! DoPrettyXML()
   " save the filetype so we can restore it later
   let l:origft = &ft
@@ -220,6 +234,14 @@ autocmd VimEnter * call s:SetCursorLine()
 " Airline
 set laststatus=2
 let g:airline#extensions#tabline#enabled=1
+
+let g:eighties_enabled = 0
+let g:eighties_minimum_width = 80
+let g:eighties_extra_width = 100 " Increase this if you want some extra room
+let g:eighties_compute = 1 " Disable this if you just want the minimum + extra
+
+"Golden ratio do not auto
+let g:golden_ratio_autocommand = 0
 
 "Coffee
 "get standard two-space indentation
@@ -270,7 +292,9 @@ autocmd FileType css vnoremap <buffer> <c-f> :call RangeCSSBeautify()<cr>
 
 " UltiSnips
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsSnippetDirectories=["myultisnips", "UltiSnips"]
+let g:UltiSnipsSnippetsDir="$HOME/antti/dotfiles/myultisnips/"
+let g:UltiSnipsExpandTrigger="<c-j>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
@@ -309,6 +333,7 @@ nmap <A-k> :wincmd k<CR>
 " NERDTree
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 0
+let g:NERDTreeWinSize = 40
 noremap <F12> :NERDTree<CR>
 nnoremap <leader>ne :NERDTree<CR>
 nmap <silent><Leader>n :NERDTreeFind<CR>
@@ -387,6 +412,16 @@ map <silent> <A-p> <C-w><S-w>
 
 "remove ^M marks
 nnoremap <leader> rm :%s/\r//
+
+"prevent entering ex mode
+nnoremap Q <nop>
+" paste and preserve register
+vnoremap <leader>p "_dP
+
+nnoremap <leader> r :GoldenRatioResize<cr>
+"
+" can paste many times without losing the register value
+vnoremap <silent> <expr> p <sid>Repl()
 
 call SetupCommandAlias('evimrc', 'e ~/dotfiles/_vimrc')
 call SetupCommandAlias('ewebdev', 'e c:/development/current/sievoweb/sievo.ppm/')
