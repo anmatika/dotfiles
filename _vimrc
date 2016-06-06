@@ -39,10 +39,21 @@ Plugin 'honza/vim-snippets'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'roman/golden-ratio'
 Plugin 'justincampbell/vim-eighties'
+Plugin 'gcmt/taboo.vim'
+Plugin 'xolox/vim-misc'
+Plugin 'xolox/vim-session'
+Plugin 'jistr/vim-nerdtree-tabs'
 "Plugin 'lukaszkorecki/CoffeeTags'
 "Plugin 'vim-scripts/TFS'
 "Plugin 'ryanoasis/vim-devicons'
 call vundle#end()            " required
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"NOTES
+
+" - don't open by "vim ." when using vim-nerdtree-tabs, instead open vim always just by typing "vim"
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "
 " Brief help
 " :PluginList       - lists configured plugins
@@ -63,9 +74,11 @@ setglobal fileencoding=utf-8
   "setglobal bomb
 set fileencodings=ucs-bom,utf-8,latin1
 syntax on
-set paste
+"set paste
 let g:airline_powerline_fonts=1
-
+let g:taboo_tabline=0
+let g:NERDTreeHijackNetrw=0
+let g:nerdtree_tabs_open_on_gui_startup=0
 " Filetypes and encoding
 set fileformats=unix,dos,mac
 set encoding=utf-8
@@ -128,6 +141,8 @@ set background=dark                  " Dark background variation of theme
 set guifont=Source\ Code\ Pro:h10
 set guioptions-=T                    " TODO
 set guioptions+=c                    " TODO Console messages
+set guioptions-=e
+set sessionoptions+=tabpages,globals
 set linespace=0                      " Don't insert any extra pixel lines
 set lazyredraw                       " Don't redraw while running macros
 set wildmenu                         " Wild menu
@@ -160,6 +175,9 @@ highlight ExtraWhitespace ctermbg=red guibg=red
 highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
 au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 au InsertLeave * match ExtraWhitespace /\s\+$/
+"
+"set scss filetype for less, then you can beautify it by gg=G
+autocmd BufNewFile,BufRead *.less set filetype=scss
 
 " Functions
 function! s:SetCursorLine()
@@ -227,7 +245,7 @@ command! PrettyXML call DoPrettyXML()
 call HideToolBarsAndScrollBars()
 call StartMaximized()
 
-autocmd VimEnter * call s:SetCursorLine()
+"autocmd VimEnter * call s:SetCursorLine()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugins
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -270,7 +288,7 @@ let g:syntastic_quiet_messages = { "level": "warnings" }
 
 "CtrlP
 let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/]\.(git|hg|svn|node_modules)$',
+  \ 'dir':  '\v[\/]\.(git|hg|svn|node_modules|bower_components|bin)$',
   \ 'file': '\v\.(exe|so|dll|generated.cs)$',
   \ 'link': 'some_bad_symbolic_links',
   \ }
@@ -336,8 +354,11 @@ let NERDTreeDirArrows = 0
 let g:NERDTreeWinSize = 40
 noremap <F12> :NERDTree<CR>
 nnoremap <leader>ne :NERDTree<CR>
-nmap <silent><Leader>n :NERDTreeFind<CR>
+nmap <silent><Leader>nf :NERDTreeFind<CR>
 nmap <silent><Leader>nt :NERDTreeToggle <Esc>
+
+"NERDTree tabs
+nnoremap <silent><leader>n :NERDTreeTabsOpen<cr>
 
 "CtrlP (finder)
 nmap <C-p> :CtrlP<CR>
@@ -378,7 +399,11 @@ call s:make_uppercase()
 "yank to clipboard+
 vmap <C-c> "+y 
 
-nnoremap <silent> <F2> :BufExplorer<CR>>
+" BufExplorer
+nnoremap <silent> <s-F2> :BufExplorer<CR>
+nnoremap <silent> <F2> :ToggleBufExplorer<CR>
+
+"CtrlPTag
 nnoremap <leader>. :CtrlPTag<cr>
 
 "coffee 
@@ -415,10 +440,10 @@ nnoremap <leader> rm :%s/\r//
 
 "prevent entering ex mode
 nnoremap Q <nop>
-" paste and preserve register
-vnoremap <leader>p "_dP
 
-nnoremap <leader> r :GoldenRatioResize<cr>
+"nnoremap <silent> <c-w> :tabclose<cr>
+
+nnoremap <silent> <leader>r :GoldenRatioResize <CR><ESC>
 "
 " can paste many times without losing the register value
 vnoremap <silent> <expr> p <sid>Repl()
