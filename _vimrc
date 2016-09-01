@@ -7,6 +7,7 @@ set rtp+=$HOME/vimfiles/bundle/Vundle.vim/
 call vundle#begin('$USERPROFILE/vimfiles/bundle/')
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-repeat'
 Plugin 'L9'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
@@ -15,7 +16,7 @@ Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'groenewege/vim-less'
 Plugin 'tpope/vim-surround'
 Plugin 'easymotion/vim-easymotion'
-Plugin 'OmniSharp/omnisharp-vim'
+"Plugin 'OmniSharp/omnisharp-vim'
 Plugin 'tpope/vim-dispatch'
 Plugin 'OrangeT/vim-csharp'
 Plugin 'scrooloose/nerdcommenter'
@@ -43,6 +44,10 @@ Plugin 'gcmt/taboo.vim'
 Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-session'
 Plugin 'jistr/vim-nerdtree-tabs'
+Plugin 'svermeulen/vim-easyclip'
+Plugin 'pangloss/vim-javascript'
+Plugin 'mxw/vim-jsx'
+Plugin 'ElmCast/elm-vim'
 "Plugin 'lukaszkorecki/CoffeeTags'
 "Plugin 'vim-scripts/TFS'
 "Plugin 'ryanoasis/vim-devicons'
@@ -70,6 +75,7 @@ filetype plugin on
 filetype indent on
 set omnifunc=syntaxcomplete#Complete
 set encoding=utf-8
+set noswapfile
 setglobal fileencoding=utf-8
   "setglobal bomb
 set fileencodings=ucs-bom,utf-8,latin1
@@ -202,7 +208,14 @@ function! HideToolBarsAndScrollBars()
   set guioptions-=r  "remove right-hand scroll bar
   set guioptions-=L  "remove left-hand scroll bar
 endfunction
-
+function! ToggleErrors()
+    let old_last_winnr = winnr('$')
+    lclose
+    if old_last_winnr == winnr('$')
+        " Nothing was closed, open syntastic error location panel
+        Errors
+    endif
+endfunction
 function! RestoreRegister()
   let @" = s:restore_reg
   return ''
@@ -241,7 +254,6 @@ function! DoPrettyXML()
   exe "set ft=" . l:origft
 endfunction
 command! PrettyXML call DoPrettyXML()
-
 call HideToolBarsAndScrollBars()
 call StartMaximized()
 
@@ -253,7 +265,7 @@ call StartMaximized()
 set laststatus=2
 let g:airline#extensions#tabline#enabled=1
 
-let g:eighties_enabled = 0
+let g:eighties_enabled = 1
 let g:eighties_minimum_width = 80
 let g:eighties_extra_width = 100 " Increase this if you want some extra room
 let g:eighties_compute = 1 " Disable this if you just want the minimum + extra
@@ -261,14 +273,22 @@ let g:eighties_compute = 1 " Disable this if you just want the minimum + extra
 "Golden ratio do not auto
 let g:golden_ratio_autocommand = 0
 
+" CtrlP 
+" make the path vim has started as root path
+let g:ctrlp_working_path_mode = 0
+
+" vim-session
+let g:session_autoload='no'
+
 "Coffee
 "get standard two-space indentation
 autocmd BufNewFile,BufReadPost *.coffee setl shiftwidth=2 expandtab
-" compile on save
-autocmd BufWritePost *.coffee :silent make! --compile
+"
+" Coffee compile on save (we use gulp-coffee)
+"autocmd BufWritePost *.coffee :silent make! --compile
 
-" LESS
-autocmd BufWritePost *.less exe '!lessc ' . shellescape(expand('<afile>')) . ' ' . shellescape(expand('<afile>:r')) . '.css'
+" LESS compile on save (we use gulp-less)
+"autocmd BufWritePost *.less exe '!lessc ' . shellescape(expand('<afile>')) . ' ' . shellescape(expand('<afile>:r')) . '.css'
 
 " Syntastic
 set statusline+=%#warningmsg#
@@ -276,14 +296,15 @@ set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
 let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
+let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-let g:syntastic_javascript_checkers = ['jshint']
+let g:syntastic_javascript_checkers = ['eslint']
+"let g:syntastic_javascript_checkers = ['jshint']
 let g:syntastic_quiet_messages = { "level": "warnings" }
 
 " Auto center search
-:nnoremap n nzz  
+:nnoremap n nzz
 :nnoremap p pzz
 
 "CtrlP
@@ -436,17 +457,24 @@ map <silent> <A-n> <C-w><C-w>
 map <silent> <A-p> <C-w><S-w>
 
 "remove ^M marks
-nnoremap <leader> rm :%s/\r//
+nnoremap <leader>z :%s/\r//<cr>
 
 "prevent entering ex mode
 nnoremap Q <nop>
 
+"beautify HTML
+nnoremap <leader> bh :call beautifyHtml()<cr>
 "nnoremap <silent> <c-w> :tabclose<cr>
 
 nnoremap <silent> <leader>r :GoldenRatioResize <CR><ESC>
 "
-" can paste many times without losing the register value
-vnoremap <silent> <expr> p <sid>Repl()
+"tabclose
+nnoremap <silent> <A-w> :tabclose<cr>
+ "can paste many times without losing the register value
+"vnoremap <silent> <expr> p <sid>Repl()
 
+" use this with easy-clip to preserve vim default mapping for marks
+"nnoremap m gm
+nnoremap <silent> <F3> :<C-u>call ToggleErrors()<CR>
 call SetupCommandAlias('evimrc', 'e ~/dotfiles/_vimrc')
 call SetupCommandAlias('ewebdev', 'e c:/development/current/sievoweb/sievo.ppm/')
