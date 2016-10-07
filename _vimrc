@@ -309,11 +309,13 @@ let g:syntastic_quiet_messages = { "level": "warnings" }
 
 "CtrlP
 let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/]\.(git|hg|svn|node_modules|bower_components|bin)$',
-  \ 'file': '\v\.(exe|so|dll|generated.cs)$',
+  \ 'dir':  '\v[\/](obj|git|hg|svn|node_modules|bower_components|bin|Caching|__spec__)$',
+  \ 'file': '\v\.(exe|so|dll|generated.cs|map|tt|t4|csproj|vspscc)$',
   \ 'link': 'some_bad_symbolic_links',
   \ }
-
+"let g:ctrlp_custom_ignore = {
+  "\ 'dir':  '\v[\/](node_modules|bower_components)$'
+  "\ }
 " Indent guides
 let g:indent_guides_enable_on_vim_startup = 1
 
