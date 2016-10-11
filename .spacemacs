@@ -275,7 +275,7 @@ you should place your code here."
   (add-hook 'before-save-hook 'delete-trailing-whitespace)
   (golden-ratio-mode 1)
   (setq neo-smart-open t)
-  (setq helm-ag-base-command "C:\\ProgramData\\chocolatey\\bin\\ag --vimgrep")
+  (setq helm-ag-base-command "C:/ProgramData/chocolatey/bin/ag --vimgrep")
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
