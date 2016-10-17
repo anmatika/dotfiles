@@ -27,7 +27,7 @@ values."
      auto-completion
      javascript
      evil-commentary
-     ;; evil-surround
+     evil-surround
      csharp
      react
      ;; better-defaults
@@ -279,6 +279,8 @@ you should place your code here."
   (setq helm-ag-base-command "C:/ProgramData/chocolatey/bin/ag --vimgrep")
   (setq-default omnisharp-server-executable-path "C:/Users/anttim/code/omnisharp-roslyn/artifacts/publish/OmniSharp/default/net451")
   (setq omnisharp-debug t)
+  ;; use eslint with web-mode for jsx files
+  (flycheck-add-mode 'javascript-eslint 'web-mode)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
