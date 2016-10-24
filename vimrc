@@ -31,6 +31,11 @@ Plugin 'jlanzarotta/bufexplorer'
 Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'roman/golden-ratio'
+Plugin 'justincampbell/vim-eighties'
+Plugin 'xolox/vim-misc'
+Plugin 'xolox/vim-session'
+"Plugin 'gcmt/taboo.vim'
+Plugin 'isRuslan/vim-es6'
 "Plugin 'Decho'
 call vundle#end()
 filetype plugin indent on
@@ -46,6 +51,15 @@ syntax on
 function! s:SetCursorLine()
     set cursorline
     "hi cursorline cterm=none ctermbg=darkblue ctermfg=white gui=underline
+endfunction
+
+function! ToggleErrors()
+    let old_last_winnr = winnr('$')
+    lclose
+    if old_last_winnr == winnr('$')
+        " Nothing was closed, open syntastic error location panel
+        Errors
+    endif
 endfunction
 
 function! HideToolBarsAndScrollBars()
@@ -132,6 +146,8 @@ set tabstop=2
 set softtabstop=2
 set shiftwidth=2
 
+"Taboo
+set sessionoptions+=tabpages,globals
 " Filetype sesific
 "au FileType python setlocal tabstop=4 softtabstop=4 shiftwidth=4
 
@@ -197,6 +213,11 @@ set laststatus=2
 let g:airline#extensions#tabline#enabled=1
 let g:airline_theme='molokai'
 
+let g:eighties_enabled = 1
+let g:eighties_minimum_width = 80
+let g:eighties_extra_width = 0 " Increase this if you want some extra room
+let g:eighties_compute = 1 " Disable this if you just want the minimum + extra
+"
 " Coffee
 
 " compile on save
@@ -211,10 +232,10 @@ set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
 let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
+let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-let g:syntastic_javascript_checkers = ['jshint']
+let g:syntastic_javascript_checkers = ['eslint']
 let g:syntastic_quiet_messages = { "level": "warnings" }
 
 " Auto center search
@@ -298,10 +319,6 @@ nnoremap <leader>q :q<cr><esc>
 "" Tab
 nnoremap <C-Tab> :tabnext<CR>
 nnoremap <C-S-Tab> :tabprevious<CR>
-noremap <C-S-Tab> :tabprevious<CR>
-noremap <C-Tab> :tabnext<CR>
-inoremap <C-S-Tab> <ESC>:tabprevious<CR>
-inoremap <C-Tab> <ESC>:tabnext<CR>
 noremap <F7> :set expandtab!<CR>
 nnoremap <Leader>tn :tabnew %:h<CR>
 noremap <Leader>gt :tabnext<CR>
@@ -328,7 +345,7 @@ nnoremap <f5> :source ~/_vimrc<cr>
 "Buffer operations
 noremap <Leader>q :q<CR>
 noremap <Leader>qa :qa<CR>
-noremap <Leader>w :w<CR>
+noremap <Leader>fs :w<CR>
 
 "Text operations
 function! s:make_uppercase()
@@ -363,8 +380,10 @@ nnoremap <leader>s :%s/<c-r><c-w>/
 nnoremap <leader>f :Ag
 "tagbar
 nnoremap <F8> :TagbarToggle<CR>
+"hide error window
+nnoremap <silent> <F3> :<C-u>call ToggleErrors()<CR>
 "
 "gold ratio split resize
 "nnoremap <leader>r <Plug>(golden_ratio_resize)
 nnoremap <leader>r :GoldenRatioResize<cr>
-
+command! -nargs=0 Sw w !sudo tee % > /dev/null
