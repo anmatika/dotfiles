@@ -294,10 +294,10 @@ nnoremap <A-k> :wincmd k<CR>
 "" NERDTree
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 0
-noremap <F12> :NERDTree<CR>
+noremap <Leader>F12 :NERDTree<CR>
 nnoremap <leader>ne :NERDTree<CR>
 nnoremap <Leader>n :NERDTreeFind<CR>
-nnoremap <Leader>nt :NERDTreeToggle <Esc>
+nnoremap <Leader>ft :NERDTreeToggle <Esc>
 
 ""CtrlP (finder)
 let g:ctrlp_working_path_mode = 'ra'
@@ -312,8 +312,6 @@ noremap <silent><Leader>c :CoffeeWatch vert<CR>
 
 "Clear highlights
 nnoremap <f3> :set hlsearch!<CR>
-" Saving
-nnoremap <leader>w :w<cr><esc>
 " Quitting
 nnoremap <leader>q :q<cr><esc>
 "" Tab
