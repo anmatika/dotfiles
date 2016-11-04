@@ -19,13 +19,15 @@ values."
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers
    '(
+     windows-scripts
      markdown
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     auto-completion
+     (auto-completion :variables
+                      auto-completion-enable-snippets-in-popup t)
      javascript
      evil-commentary
      ;; evil-surround
@@ -39,7 +41,7 @@ values."
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom)
-     ;; spell-checking
+     spell-checking
      syntax-checking
      ;; gtags
      ;; ycmd
@@ -51,7 +53,7 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages '(circe diffview helm-google)
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -262,6 +264,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
   (global-set-key (kbd "<C-down>") 'enlarge-window)
   (global-set-key (kbd "<C-left>") 'shrink-window-horizontally)
   (global-set-key (kbd "<C-right>") 'enlarge-window-horizontally)
+  ;; (global-set-key (kbd "<tab>") 'yas-expand)
   )
 
 (defun dotspacemacs/user-config ()
@@ -272,8 +275,11 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
   (global-company-mode)
+  (global-auto-revert-mode 1)
   (golden-ratio-mode 1)
   (spacemacs/toggle-indent-guide-globally-on)
+  ;; (add-to-list 'yas-snippet-dirs "~/code/yasnippet-snippets")
+  (yas-global-mode t)
   ;; use company for auto-complete every mode
   ;; for js2-mode default settings
   (setq-default js2-basic-offset 2)
@@ -283,6 +289,7 @@ you should place your code here."
   (setq-default truncate-lines t)
   (setq neo-smart-open t)
   (setq helm-ag-base-command "C:/ProgramData/chocolatey/bin/ag --vimgrep")
+  (setq helm-ag-use-agignore t)
   (setq-default omnisharp-server-executable-path "C:/Users/anttim/code/omnisharp-roslyn/artifacts/publish/OmniSharp/default/net451")
   (setq omnisharp-debug t)
   ;; disable jshint since we prefer eslint checking
@@ -323,7 +330,7 @@ you should place your code here."
  '(evil-want-Y-yank-to-eol t)
  '(package-selected-packages
    (quote
-    (mmm-mode markdown-toc markdown-mode gh-md solarized-theme uuidgen toc-org powerline pug-mode spinner org org-plus-contrib org-bullets livid-mode skewer-mode simple-httpd link-hint json-snatcher json-reformat multiple-cursors js2-mode hydra parent-mode hide-comnt projectile request haml-mode gitignore-mode git-link flyspell-correct-helm flyspell-correct pos-tip flycheck pkg-info epl flx eyebrowse evil-visual-mark-mode evil-unimpaired magit magit-popup git-commit with-editor smartparens iedit evil-ediff anzu evil goto-chg undo-tree highlight eshell-z dumb-jump f diminish darkokai-theme csharp-mode web-completion-data s dash-functional tern company column-enforce-mode bind-map bind-key yasnippet packed dash helm avy helm-core async auto-complete popup package-build omtose-darker-theme evil-nerd-commenter zonokai-theme zenburn-theme zen-and-art-theme xterm-color ws-butler window-numbering which-key web-mode web-beautify volatile-highlights vi-tilde-fringe use-package underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme tronesque-theme toxi-theme tao-theme tangotango-theme tango-plus-theme tango-2-theme tagedit sunny-day-theme sublime-themes subatomic256-theme subatomic-theme stekene-theme spacemacs-theme spaceline spacegray-theme soothe-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme smooth-scrolling smeargle slim-mode shell-pop seti-theme scss-mode sass-mode reverse-theme restart-emacs rainbow-delimiters railscasts-theme quelpa purple-haze-theme professional-theme popwin planet-theme phoenix-dark-pink-theme phoenix-dark-mono-theme persp-mode pcre2el pastels-on-dark-theme paradox page-break-lines orgit organic-green-theme open-junk-file omtose-phellack-theme omnisharp oldlace-theme occidental-theme obsidian-theme noctilux-theme niflheim-theme neotree naquadah-theme mustang-theme multi-term move-text monokai-theme monochrome-theme molokai-theme moe-theme minimal-theme material-theme majapahit-theme magit-gitflow macrostep lush-theme lorem-ipsum linum-relative light-soap-theme leuven-theme less-css-mode json-mode js2-refactor js-doc jbeans-theme jazz-theme jade-mode ir-black-theme inkpot-theme info+ indent-guide ido-vertical-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation heroku-theme hemisu-theme help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-gitignore helm-flyspell helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme google-translate golden-ratio gitconfig-mode gitattributes-mode git-timemachine git-messenger gandalf-theme flycheck-pos-tip flx-ido flatui-theme flatland-theme firebelly-theme fill-column-indicator farmhouse-theme fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-commentary evil-args evil-anzu eval-sexp-fu espresso-theme eshell-prompt-extras esh-help emmet-mode elisp-slime-nav dracula-theme django-theme define-word darktooth-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme company-web company-tern company-statistics company-quickhelp colorsarenice-theme color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized coffee-mode clues-theme clean-aindent-mode cherry-blossom-theme busybee-theme buffer-move bubbleberry-theme bracketed-paste birds-of-paradise-plus-theme badwolf-theme auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes aggressive-indent afternoon-theme adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
+    (helm-google google find-file-in-project circe ranger diffview powershell mmm-mode markdown-toc markdown-mode gh-md solarized-theme uuidgen toc-org powerline pug-mode spinner org org-plus-contrib org-bullets livid-mode skewer-mode simple-httpd link-hint json-snatcher json-reformat multiple-cursors js2-mode hydra parent-mode hide-comnt projectile request haml-mode gitignore-mode git-link flyspell-correct-helm flyspell-correct pos-tip flycheck pkg-info epl flx eyebrowse evil-visual-mark-mode evil-unimpaired magit magit-popup git-commit with-editor smartparens iedit evil-ediff anzu evil goto-chg undo-tree highlight eshell-z dumb-jump f diminish darkokai-theme csharp-mode web-completion-data s dash-functional tern company column-enforce-mode bind-map bind-key yasnippet packed dash helm avy helm-core async auto-complete popup package-build omtose-darker-theme evil-nerd-commenter zonokai-theme zenburn-theme zen-and-art-theme xterm-color ws-butler window-numbering which-key web-mode web-beautify volatile-highlights vi-tilde-fringe use-package underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme tronesque-theme toxi-theme tao-theme tangotango-theme tango-plus-theme tango-2-theme tagedit sunny-day-theme sublime-themes subatomic256-theme subatomic-theme stekene-theme spacemacs-theme spaceline spacegray-theme soothe-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme smooth-scrolling smeargle slim-mode shell-pop seti-theme scss-mode sass-mode reverse-theme restart-emacs rainbow-delimiters railscasts-theme quelpa purple-haze-theme professional-theme popwin planet-theme phoenix-dark-pink-theme phoenix-dark-mono-theme persp-mode pcre2el pastels-on-dark-theme paradox page-break-lines orgit organic-green-theme open-junk-file omtose-phellack-theme omnisharp oldlace-theme occidental-theme obsidian-theme noctilux-theme niflheim-theme neotree naquadah-theme mustang-theme multi-term move-text monokai-theme monochrome-theme molokai-theme moe-theme minimal-theme material-theme majapahit-theme magit-gitflow macrostep lush-theme lorem-ipsum linum-relative light-soap-theme leuven-theme less-css-mode json-mode js2-refactor js-doc jbeans-theme jazz-theme jade-mode ir-black-theme inkpot-theme info+ indent-guide ido-vertical-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation heroku-theme hemisu-theme help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-gitignore helm-flyspell helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag hc-zenburn-theme gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme google-translate golden-ratio gitconfig-mode gitattributes-mode git-timemachine git-messenger gandalf-theme flycheck-pos-tip flx-ido flatui-theme flatland-theme firebelly-theme fill-column-indicator farmhouse-theme fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-commentary evil-args evil-anzu eval-sexp-fu espresso-theme eshell-prompt-extras esh-help emmet-mode elisp-slime-nav dracula-theme django-theme define-word darktooth-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme company-web company-tern company-statistics company-quickhelp colorsarenice-theme color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized coffee-mode clues-theme clean-aindent-mode cherry-blossom-theme busybee-theme buffer-move bubbleberry-theme bracketed-paste birds-of-paradise-plus-theme badwolf-theme auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes aggressive-indent afternoon-theme adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
