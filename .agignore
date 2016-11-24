@@ -1,0 +1,14 @@
+*tpls.js
+*generated.cs
+*min.js
+/Scripts/jquery.*
+/Caching/
+node_modules/
+bower_components/
+/bin/
+*T4MVC*
+Sievo.Ppm.csproj
+TAGS
+*.map
+generated/
+obj/
