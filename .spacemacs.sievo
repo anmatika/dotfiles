@@ -125,7 +125,7 @@ values."
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 13
+                               :size 14
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -260,12 +260,21 @@ before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
 
   (setq evil-escape-key-sequence "jk")
+  (setq web-mode-engines-alist
+        '(("razor"    . "\\.cshtml\\'"))
+  )
   (add-hook 'before-save-hook 'delete-trailing-whitespace)
   (global-set-key (kbd "<C-up>") 'shrink-window)
   (global-set-key (kbd "<C-down>") 'enlarge-window)
   (global-set-key (kbd "<C-left>") 'shrink-window-horizontally)
   (global-set-key (kbd "<C-right>") 'enlarge-window-horizontally)
   ;; (global-set-key (kbd "<tab>") 'yas-expand)
+  ;; (setq default-frame-alist '((font . "Source Code Pro-13")))
+  (add-to-list 'default-frame-alist '(font . "Source Code Pro-11"))
+  (add-to-list 'auto-mode-alist '("\\.cshtml\\'" . web-mode))
+  (scroll-bar-mode -1)
+  (setq-default left-margin-width 0 right-margin-width 0) ; Define new widths.
+  (set-window-buffer nil (current-buffer)) ; Use them now.
   )
 
 (defun dotspacemacs/user-config ()
