@@ -32,6 +32,7 @@ floating_modifier $mod
 # start a terminal
 #bindsym $mod+Return exec i3-sensible-terminal
 bindsym $mod+Return exec xterm
+#bindsym $mod+Return exec xterm -e tmux
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -95,9 +96,9 @@ bindsym $mod+a focus parent
 
 # switch to workspace
 bindsym $mod+1 workspace 1 terminal
-bindsym $mod+2 workspace 2 browser
-bindsym $mod+3 workspace 3 coding
-bindsym $mod+4 workspace 4 
+bindsym $mod+2 workspace 2 chromium
+bindsym $mod+3 workspace 3 firefox
+bindsym $mod+4 workspace 4 coding
 bindsym $mod+5 workspace 5
 bindsym $mod+6 workspace 6
 bindsym $mod+7 workspace 7
@@ -107,9 +108,9 @@ bindsym $mod+0 workspace 10
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace 1 terminal
-bindsym $mod+Shift+2 move container to workspace 2 browser
-bindsym $mod+Shift+3 move container to workspace 3 coding
-bindsym $mod+Shift+4 move container to workspace 4 
+bindsym $mod+Shift+2 move container to workspace 2 chromium
+bindsym $mod+Shift+3 move container to workspace 3 firefox
+bindsym $mod+Shift+4 move container to workspace 4 coding
 bindsym $mod+Shift+5 move container to workspace 5
 bindsym $mod+Shift+6 move container to workspace 6
 bindsym $mod+Shift+7 move container to workspace 7
@@ -141,6 +142,9 @@ bindsym XF86AudioPlay exec playerctl play
 bindsym XF86AudioPause exec playerctl pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
+
+bindsym $mod+b workspace back_and_forth
+bindsym $mod+Shift+b move container to workspace back_and_forth
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -175,14 +179,21 @@ bar {
 }
 
 # workspace assignment (use "xprop")
-assign [class="^Firefox$"] 2 browser
-assign [class="^Chromium$"] 2 browser
-assign [class="^Sublime Text$"] 3 coding
-assign [class="^tmux$"] 4
+assign [class="chromium$"] 2 chromium
+assign [class="^Firefox$"] 3 firefox
+assign [class="^Emacs$"] 4 coding
+assign [class="^tmux$"] 5
 # assign [class="^URxvt$" instance="^mail$"] 4
 # assign [class="^Xchat$"] 5
 # assign [class="^Rednotebook$"] 6
 # assign [class="^Decibel-audio-player.py$"] 7
 # assign [title="Lingea Lexicon 5$"] 8
 
+# autostart stuff
 exec --no-startup-id tmux
+exec --no-startup-id redshift-gtk
+
+# bind keys to start programs
+bindsym $mod+c exec chromium
+bindsym $mod+g exec gimp
+
