@@ -125,7 +125,7 @@ values."
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 14
+                               :size 16
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -258,7 +258,6 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
-
   (setq evil-escape-key-sequence "jk")
   (setq web-mode-engines-alist
         '(("razor"    . "\\.cshtml\\'"))
@@ -268,8 +267,6 @@ before packages are loaded. If you are unsure, you should try in setting them in
   (global-set-key (kbd "<C-down>") 'enlarge-window)
   (global-set-key (kbd "<C-left>") 'shrink-window-horizontally)
   (global-set-key (kbd "<C-right>") 'enlarge-window-horizontally)
-  ;; (global-set-key (kbd "<tab>") 'yas-expand)
-  ;; (setq default-frame-alist '((font . "Source Code Pro-13")))
   (add-to-list 'default-frame-alist '(font . "Source Code Pro-11"))
   (add-to-list 'auto-mode-alist '("\\.cshtml\\'" . web-mode))
   (scroll-bar-mode -1)
@@ -290,8 +287,10 @@ you should place your code here."
   (spacemacs/toggle-indent-guide-globally-on)
   ;; (add-to-list 'yas-snippet-dirs "~/code/yasnippet-snippets")
   (yas-global-mode t)
-  ;; use company for auto-complete every mode
-  ;; for js2-mode default settings
+  (add-to-list 'auto-mode-alist '("\\.jsx\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
+  (setq web-mode-content-types-alist
+        '(("jsx" . "\\.js[x]?\\'")))
   (setq-default js2-basic-offset 2)
   (setq-default js-indent-level 4)
   (setq truncate-lines t)
@@ -306,11 +305,9 @@ you should place your code here."
   (setq-default flycheck-disabled-checkers
                 (append flycheck-disabled-checkers
                         '(javascript-jshint)))
-  ;; (setq flycheck-javascript-eslint-executable
-  ;;       "C:/development/Tarmo/SievoWeb/Sievo.Ppm/node_modules/.bin/eslint")
   (setq flycheck-checkers '(javascript-eslint))
   ;; use eslint with web-mode for jsx files
-  (flycheck-add-mode 'javascript-eslint 'js2-mode)
+  (flycheck-add-mode 'javascript-eslint 'web-mode)
   ;; Create no # files
   (setq create-lockfiles nil)
   ;; Use Spacemacs as the $EDITOR for git commits
