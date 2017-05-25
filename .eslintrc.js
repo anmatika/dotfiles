@@ -6,7 +6,7 @@ module.exports = exports = {
 
   "extends": "airbnb",
   "rules": {
-    "indent": ["error", 4],
+    "indent": ["error", 2],
     "comma-dangle": ["off"],
     "import/no-extraneous-dependencies": ["off"],
     "no-console": ["off"],

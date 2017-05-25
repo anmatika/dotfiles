@@ -47,8 +47,8 @@
 "screenshot-selection"
   m:0x1 + c:255
 
-
-
+"setkeyb fi"
+  m:0x8 + c:64
 #   Shift+Mod2+alt + s
 #
 ## set directly keycode (here control+alt+mod2 + f with my keyboard)

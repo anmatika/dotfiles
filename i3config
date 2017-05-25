@@ -169,6 +169,30 @@ mode "resize" {
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
+set $MENU "Audacious Chromium Dolphin dOublecmd Foxit giMp Gvim Irfanview Nixnote Palemoon Qbittorrent Ranger Skype Vlc Xnview Wps Et Libreoffice"
+bindsym Menu mode $MENU
+mode $MENU {
+  bindsym d exec dolphin, mode, "default"
+  bindsym a exec audacious, mode "default"
+  bindsym l exec libreoffice, mode "default"
+  bindsym m exec gimp, mode "default"
+  bindsym c exec chromium, mode "default"
+  bindsym i exec irfanview,mode "default"
+  bindsym p exec palemoon, mode "default"
+  bindsym f exec foxitreader, mode "default"
+  bindsym g exec gvim, mode "default"
+  bindsym w exec wps, mode "default"
+  bindsym e exec et, mode "default"
+  bindsym q exec qbittorrent, mode "default"
+  bindsym v exec vlc, mode "default"
+  bindsym o exec doublecmd, mode "default"
+  bindsym x exec xnviewmp, mode "default"
+  bindsym r exec terminator --profile ranger, mode "default"
+  bindsym s exec skype, mode "default"
+  bindsym n exec nixnote, mode "default"
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
 
 bindsym $mod+r mode "resize"
 
@@ -190,10 +214,11 @@ assign [class="^tmux$"] 5
 # assign [title="Lingea Lexicon 5$"] 8
 
 # autostart stuff
-exec --no-startup-id tmux
 exec --no-startup-id redshift-gtk
 
 # bind keys to start programs
 bindsym $mod+c exec chromium
 bindsym $mod+g exec gimp
+bindsym $mod+x exec firefox
+bindsym $mod+o exec spotify
 
