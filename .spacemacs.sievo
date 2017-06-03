@@ -291,7 +291,7 @@ you should place your code here."
   (add-to-list 'auto-mode-alist '("\\.js\\'" . web-mode))
   (setq web-mode-content-types-alist
         '(("jsx" . "\\.js[x]?\\'")))
-  (setq-default js2-basic-offset 2)
+  (setq-default js2-basic-offset 4)
   (setq-default js-indent-level 4)
   (setq truncate-lines t)
   ;; Whitespace & wrapping
