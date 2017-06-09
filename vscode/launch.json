@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [{
+        "name": "Launch localhost",
+        "type": "chrome",
+        "request": "launch",
+        "url": "http://sievo065:55555/AnttiM/",
+        "webRoot": "${workspaceRoot}/generated/",
+
+        "runtimeArgs": [
+            "--new-window", //Open in new window
+            "--user-data-dir=C:/temp/",
+            "--remote-debugging-port=9222"
+        ],
+        "sourceMaps": true
+    }, {
+        "name": "Attach localhost",
+        "type": "chrome",
+        "request": "attach",
+        "port": 9222,
+        "urlFilter": "http://sievo065:55555/AnttiM/*",
+        "webRoot": "${workspaceRoot}/generated/",
+        "sourceMaps": true
+    }]
+}
