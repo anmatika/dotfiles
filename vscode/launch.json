@@ -19,9 +19,19 @@
             "externalConsole": false,
             "sourceMaps": false,
             "outDir": null
-        },
-        {
-            "name": "Launch localhost",
+        }, {
+            "name": "Attach to Chrome, with sourcemaps",
+            "type": "chrome",
+            "request": "attach",
+            "port": 9222,
+            "sourceMaps": true,
+            "webRoot": "${workspaceRoot}/src",
+            "url": "http://localhost:3000/",
+            "sourceMapPathOverrides": {
+              "webpack:///*": "/*"
+            }
+        }, {
+            "name": "Launch web Sievo",
             "type": "chrome",
             "request": "launch",
             "url": "http://sievo065:55555/AnttiM/",
@@ -34,7 +44,7 @@
             ],
             "sourceMaps": true
         }, {
-            "name": "Attach localhost",
+            "name": "Attach web Sievo",
             "type": "chrome",
             "request": "attach",
             "port": 9222,
