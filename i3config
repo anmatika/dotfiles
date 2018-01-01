@@ -144,6 +144,8 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
 bindsym $mod+b workspace back_and_forth
+bindsym $mod+n workspace next
+bindsym $mod+p workspace prev
 bindsym $mod+Shift+b move container to workspace back_and_forth
 
 # resize window (you can also use the mouse for that)

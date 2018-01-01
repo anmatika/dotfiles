@@ -1,6 +1,13 @@
 {
     "version": "0.2.0",
-    "configurations": [{
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "program": "${workspaceRoot}/server/rules.js"
+        },
+        {
             "name": "Gulp",
             "type": "node",
             "request": "launch",
