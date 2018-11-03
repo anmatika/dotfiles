@@ -1,45 +1,40 @@
 // Place your key bindings in this file to overwrite the defaults
 [
-    {
-        "key": "ctrl+0",
-        "command": "-workbench.action.focusSideBar"
-    },
-    {
-        "key": "ctrl+1",
-        "command": "-workbench.action.focusFirstEditorGroup"
-    },
-    {
-        "key": "ctrl+0",
-        "command": "workbench.files.action.focusFilesExplorer"
-    },
-    {
-        "key": "ctrl+alt+f",
-        "command": "eslint.executeAutofix"
-    },
-    {
-        "key": "ctrl+alt+v",
-        "command": "toggleVim"
-    },
-    {
-        "key": "ctrl+o",
-        "command": "workbench.action.openPreviousEditorFromHistory"
-    },
-    {
-        "key": "ctrl+alt+s",
-        "command": "editor.action.insertSnippet"
-    },
-    {
-        "key": "ctrl+alt+p",
-        "command": "editor.emmet.action.matchingPair"
-    },
-    {
-        "key": "shift+alt+a",
-        "command": "editor.action.blockComment",
-        "when": "editorTextFocus && !editorReadonly"
-    },
-    {
-        "key": "ctrl+shift+a",
-        "command": "-editor.action.blockComment",
-        "when": "editorTextFocus && !editorReadonly"
-    }
+  {
+    "key": "ctrl+0",
+    "command": "-workbench.action.focusSideBar"
+  },
+  {
+    "key": "ctrl+1",
+    "command": "-workbench.action.focusFirstEditorGroup"
+  },
+  {
+    "key": "ctrl+0",
+    "command": "workbench.files.action.focusFilesExplorer"
+  },
+  {
+    "key": "ctrl+alt+f",
+    "command": "eslint.executeAutofix"
+  },
+  {
+    "key": "ctrl+alt+v",
+    "command": "toggleVim"
+  },
+  {
+    "key": "ctrl+o",
+    "command": "workbench.action.openPreviousEditorFromHistory"
+  },
+  {
+    "key": "ctrl+alt+s",
+    "command": "editor.action.insertSnippet"
+  },
+  {
+    "key": "ctrl+alt+p",
+    "command": "editor.emmet.action.matchingPair"
+  },
+  {
+    "key": "f8",
+    "command": "workbench.action.debug.continue",
+    "when": "inDebugMode"
+  }
 ]

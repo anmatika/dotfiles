@@ -1,0 +1,95 @@
+{
+  "vim.leader": "<space>",
+  "vim.easymotion": true,
+  "vim.sneak": true,
+  "vim.incsearch": true,
+  "vim.useSystemClipboard": true,
+  "vim.useCtrlKeys": true,
+  "vim.hlsearch": true,
+  "vim.insertModeKeyBindings": [
+    {
+      "before": ["j", "j"],
+      "after": ["<Esc>"]
+    }
+  ],
+
+  "vim.normalModeKeyBindingsNonRecursive": [
+    {
+      "before": ["<leader>", "d"],
+      "after": ["d", "d"]
+    },
+    {
+      "before": ["<C-n>"],
+      "commands": [":nohl"]
+    },
+    {
+      "before": [":"],
+      "commands": ["workbench.action.showCommands"]
+    },
+    {
+      "before": ["<leader>", "m"],
+      "commands": ["bookmarks.toggle"]
+    },
+    {
+      "before": ["<leader>", "b"],
+      "commands": ["bookmarks.list"]
+    }
+  ],
+  "vim.handleKeys": {
+    "<C-a>": false,
+    "<C-f>": false
+  },
+  "vim.statusBarColorControl": true,
+  "vim.statusBarColors.normal": "#383838",
+  "vim.statusBarColors.insert": "#BF616A",
+  "vim.statusBarColors.visual": "#B48EAD",
+  "vim.statusBarColors.visualline": "#B48EAD",
+  "vim.statusBarColors.visualblock": "#A3BE8C",
+  "vim.statusBarColors.replace": "#D08770",
+  "vim.easymotionMarkerBackgroundColor": "#ffffff",
+  "vim.easymotionMarkerHeight": 18,
+  "vim.easymotionMarkerFontSize": "16",
+  "vim.easymotionMarkerFontWeight": "bold",
+  "vim.easymotionMarkerWidthPerChar": 10,
+
+  "editor.renderWhitespace": "all",
+  "editor.formatOnSave": true,
+  "editor.fontSize": 14,
+  "editor.fontFamily": "'Fira Code Light', 'Operator Mono', 'The Sans Mono Condensed'",
+  "editor.fontLigatures": true,
+  "editor.fontWeight": "bold",
+  "editor.insertSpaces": true,
+  "editor.mouseWheelZoom": true,
+  "editor.tabSize": 2,
+  "editor.lineNumbers": "relative",
+
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true,
+  "git.autofetch": true,
+
+  "window.zoomLevel": 0,
+
+  "javascript.format.enable": false,
+  "javascript.validate.enable": false,
+
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+
+  "prettier.eslintIntegration": true,
+  "prettier.printWidth": 120,
+  "prettier.trailingComma": "all",
+
+  "terminal.integrated.fontFamily": "monospace",
+  "terminal.integrated.shell.windows": "C:\\WINDOWS\\Sysnative\\WindowsPowerShell\\v1.0\\powershell.exe",
+
+  "eslint.autoFixOnSave": false,
+  "explorer.confirmDelete": false,
+
+  "workbench.colorTheme": "Panda Syntax",
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.colorCustomizations": {
+    "statusBar.background": "#BF616A",
+    "statusBar.noFolderBackground": "#BF616A",
+    "statusBar.debuggingBackground": "#BF616A"
+  }
+}
