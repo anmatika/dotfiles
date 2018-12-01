@@ -8,7 +8,7 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'tpope/vim-fugitive'
 Plugin 'L9'
-Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/nerdtred'
 Plugin 'scrooloose/syntastic'
 "Plugin 'mattn/emmet-vim'
 Plugin 'ctrlpvim/ctrlp.vim'
@@ -293,9 +293,14 @@ nnoremap <A-k> :wincmd k<CR>
 
 "" NERDTree
 let NERDTreeMinimalUI = 1
-let NERDTreeDirArrows = 0
-noremap <Leader>F12 :NERDTree<CR>
+
+nnoremap <Leader>F12 :NERDTree<CR>
 nnoremap <leader>ne :NERDTree<CR>
+
+"For some reason, vim registers <C-/> as <C-_>
+nmap <C-_> <Plug>NERDCommenterToggle
+vmap <C-_> <Plug>NERDCommenterToggle<CR>gv
+
 nnoremap <Leader>n :NERDTreeFind<CR>
 nnoremap <Leader>ft :NERDTreeToggle <Esc>
 
