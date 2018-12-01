@@ -175,7 +175,7 @@ set linespace=0                      " Don't insert any extra pixel lines
 set lazyredraw                       " Don't redraw while running macros
 set wildmenu                         " Wild menu
 set wildmode=longest,list,full       " Wild menu options
-
+set pastetoggle=<F2>
 " Display special characters and helpers
 set list
 " Show < or > when characters are not displayed on the left or right.
@@ -333,7 +333,7 @@ autocmd FileType jsx vnoremap <buffer> <c-f> :call RangeJsxBeautify()<cr>
 autocmd FileType html vnoremap <buffer> <c-f> :call RangeHtmlBeautify()<cr>
 autocmd FileType css vnoremap <buffer> <c-f> :call RangeCSSBeautify()<cr>
 
-nnoremap <F2> :buffers<CR>:buffer<Space>
+nnoremap <F3> :buffers<CR>:buffer<Space>
 nnoremap <leader>. :CtrlPTag<cr>
 
 "rename under cursor
@@ -354,7 +354,7 @@ call s:make_uppercase()
 "yank to clipboard+
 vmap <C-c> "+y 
 
-nnoremap <silent> <F2> :BufExplorer<CR>
+nnoremap <silent> <F3> :BufExplorer<CR>
 
 " Maps Alt-[h,j,k,l] to resizing a window split
 map <silent> <A-h> <C-w><
