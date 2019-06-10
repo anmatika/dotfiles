@@ -390,3 +390,6 @@ nnoremap <silent> <F3> :<C-u>call ToggleErrors()<CR>
 "nnoremap <leader>r <Plug>(golden_ratio_resize)
 nnoremap <leader>r :GoldenRatioResize<cr>
 command! -nargs=0 Sw w !sudo tee % > /dev/null
+"
+"Disable ex mode
+nnoremap Q <Nop>
